@@ -77,6 +77,17 @@ tools:
         headline: {type: string, default: "", description: "Tiêu đề"}
       required: [items, template]
 
+  # ---------------- Team-authored tool ----------------
+  - name: source_check
+    description: "Perform a transparent first-pass quality check for one supplied web source using URL-level signals. Use when the user asks whether a source looks credible or wants source-quality screening; this does not replace fetch or fact verification."
+    parameters:
+      type: object
+      properties:
+        url: {type: string, default: "", description: "Absolute source URL to assess"}
+        title: {type: string, default: "", description: "Optional page or article title"}
+        published_date: {type: string, default: "", description: "Optional publication date as displayed by the source"}
+      required: [url]
+
   # ---------------- Bonus tools ----------------
   - name: send
     description: "Send text externally (Telegram). This is a write action: call only after the user explicitly confirms the exact content; otherwise use clarify with response_type=yes_no. Never use this tool to display a normal answer."
