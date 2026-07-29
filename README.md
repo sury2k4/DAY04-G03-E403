@@ -264,11 +264,21 @@ Checklist tối thiểu:
 
 - khóa artifact trước buổi demo;
 - kiểm tra API key, quota, và link demo còn sống;
-- tải lại giao diện một lần để xác nhận phiên demo hiển thị đúng artifact version;
 - mở sẵn logs/run JSON/transcript cần chiếu;
 - chuẩn bị fallback run hoặc fallback transcript nếu mạng chập chờn;
 - không để lộ secrets trong screenshot, log, hoặc poster;
 - cùng một scenario nên được so sánh xuyên suốt v0 → later versions để thấy cải thiện rõ.
+
+Kiểm tra nhanh UI từ thư mục gốc của repository:
+
+```bash
+cd starter_v0
+streamlit run app.py
+```
+
+Mở `http://localhost:8501`, xác nhận đúng artifact version và chạy thử một
+scenario trước khi chia sẻ link demo. Nếu dùng tunnel, kiểm tra lại URL công
+khai trên một thiết bị khác để tránh phụ thuộc vào cache hoặc phiên đăng nhập.
 
 Vòng lặp làm việc nên là:
 
