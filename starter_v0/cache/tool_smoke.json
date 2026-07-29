@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "tools": [
+    "extract_links",
+    "text_stats",
+    "detect_language",
+    "relevance_rank",
+    "quote_extract"
+  ],
+  "checks": {
+    "deduplicate_links": true,
+    "sentence_count": true,
+    "vietnamese_detection": true,
+    "relevance_ranking": true,
+    "quote_limit_and_match": true
+  }
+}

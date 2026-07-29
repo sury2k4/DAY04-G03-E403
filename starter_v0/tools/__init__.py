@@ -8,6 +8,8 @@ import yaml
 # Folder names are intentionally vague to match the tool names students see.
 # The imported function names are the underlying implementations (unchanged).
 from .clarify.tool import ask_user
+from .detect_language.tool import detect_language
+from .extract_links.tool import extract_links
 from .papers.tool import arxiv_search
 from .paper_text.tool import get_arxiv_paper_text
 from .timeline.tool import get_user_tweets
@@ -17,6 +19,9 @@ from .policy.tool import search_company_policy
 from .social_search.tool import search_tweets
 from .send.tool import send_telegram
 from .lookup.tool import web_search
+from .quote_extract.tool import extract_quotes
+from .relevance_rank.tool import rank_relevance
+from .text_stats.tool import text_stats
 
 
 # NOTE (starter_v0): tool names here are intentionally vague. These keys are the
@@ -26,6 +31,11 @@ from .lookup.tool import web_search
 # Otherwise the eval raises "not declared in tools.yaml" or scores every call as a name mismatch.
 TOOL_FUNCTIONS = {
     "clarify": ask_user,
+    "extract_links": extract_links,
+    "text_stats": text_stats,
+    "detect_language": detect_language,
+    "relevance_rank": rank_relevance,
+    "quote_extract": extract_quotes,
     "timeline": get_user_tweets,
     "social_search": search_tweets,
     "lookup": web_search,
@@ -51,4 +61,3 @@ def to_openai_tools(declarations: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "parameters": item.get("parameters", {"type": "object", "properties": {}}),
         },
     } for item in declarations]
-

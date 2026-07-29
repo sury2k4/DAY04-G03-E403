@@ -1,7 +1,236 @@
 {
-  "dataset_id": "day04_v2_research_group",
-  "dataset_role": "group",
-  "description": "Template để NHÓM tự viết đúng 10 case: 5 single-turn dùng query và 5 multi-turn dùng turns. Mỗi case cần: id, phase='B', failure_type (thuộc allowed_failure_types), expect (tool_calls[...] hoặc no_tool=true), và metadata.what_it_tests. File để trống có chủ đích vì mỗi nhóm phải tự thiết kế các case này.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "dataset_id": "day04_v2_team_research_eval",
+  "dataset_role": "team",
+  "description": "Team-authored eval for deterministic research analysis tools and multi-turn boundaries.",
+  "cases": [
+    {
+      "id": "G01_extract_links",
+      "phase": "B",
+      "query": "Trích xuất các đường link trong đoạn này: Xem https://example.com/a và https://openai.com/research.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "extract_links",
+            "args": {
+              "text": "Xem https://example.com/a và https://openai.com/research."
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Trích URL từ văn bản có sẵn mà không gọi fetch hoặc lookup."
+      }
+    },
+    {
+      "id": "G02_text_stats",
+      "phase": "B",
+      "query": "Đếm số từ và số câu của đoạn này: AI đang thay đổi nghiên cứu. Agent giúp tìm nguồn nhanh hơn.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "text_stats",
+            "args": {
+              "text": "AI đang thay đổi nghiên cứu. Agent giúp tìm nguồn nhanh hơn."
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Dùng analyzer local để thống kê văn bản, không tìm dữ liệu mới."
+      }
+    },
+    {
+      "id": "G03_detect_language",
+      "phase": "B",
+      "query": "Nhận diện ngôn ngữ của câu này: Đây là một bản tin nghiên cứu về AI.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "detect_language",
+            "args": {
+              "text": "Đây là một bản tin nghiên cứu về AI."
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Nhận diện ngôn ngữ local thay vì gọi web search hoặc dịch vụ bên ngoài."
+      }
+    },
+    {
+      "id": "G04_relevance_rank",
+      "phase": "B",
+      "query": "Xếp hạng các item sau theo mức liên quan đến AI: item 1 có title 'AI research' và summary 'new model'; item 2 có title 'Cooking' và summary 'recipes'.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "relevance_rank",
+            "args": {
+              "query": "AI"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Xếp hạng dữ liệu đã có theo query mà không fetch nguồn mới."
+      }
+    },
+    {
+      "id": "G05_quote_extract",
+      "phase": "B",
+      "query": "Lấy tối đa 2 câu có chứa từ khóa 'AI' từ đoạn này: AI is useful. Weather is clear. AI helps research.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "quote_extract",
+            "args": {
+              "keywords": ["AI"],
+              "max_quotes": 2
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Trích dẫn nguyên văn theo keyword và giới hạn số câu."
+      }
+    },
+    {
+      "id": "G06_missing_url_after_context",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Mình muốn nghiên cứu một bài viết về AI."
+        },
+        {
+          "role": "user",
+          "content": "Tóm tắt bài này giúp mình."
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Không tự đoán URL khi user yêu cầu tóm tắt bài nhưng chưa cung cấp link."
+      }
+    },
+    {
+      "id": "G07_missing_social_account",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tôi cần theo dõi tin trên mạng xã hội."
+        },
+        {
+          "role": "user",
+          "content": "Tóm tắt 5 tweet mới nhất giúp mình."
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Không đoán tài khoản khi yêu cầu timeline thiếu người hoặc handle."
+      }
+    },
+    {
+      "id": "G08_cancel_side_effect",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin này lên Telegram giúp mình."
+        },
+        {
+          "role": "user",
+          "content": "Thôi, không gửi nữa. Chỉ nói cho mình agent có thể làm gì."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "no_tool": true
+      },
+      "metadata": {
+        "what_it_tests": "Lượt mới nhất hủy hành động nhạy cảm và không gọi send hoặc clarify."
+      }
+    },
+    {
+      "id": "G09_switch_to_url",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm tin AI hôm nay trên web."
+        },
+        {
+          "role": "user",
+          "content": "Đọc bài này giúp mình: https://example.com/article"
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com/article"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Yêu cầu mới nhất đọc URL phải hủy routing lookup của lượt trước."
+      }
+    },
+    {
+      "id": "G10_switch_to_local_analysis",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm tweet mới nhất về GPT-5."
+        },
+        {
+          "role": "user",
+          "content": "Bây giờ đếm số từ của đoạn này: AI agents help research teams."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "text_stats",
+            "args": {
+              "text": "AI agents help research teams."
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Lượt mới nhất chuyển từ social search sang local text analysis."
+      }
+    }
+  ]
 }

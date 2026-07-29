@@ -28,7 +28,7 @@ tools:
       required: [screenname]
 
   - name: social_search
-    description: "Tìm trên mạng xã hội."
+    description: "Tìm bài đăng trên mạng xã hội theo chủ đề của yêu cầu hiện tại. Chỉ gọi khi lượt user mới nhất vẫn yêu cầu tìm social posts; không gọi cho yêu cầu web/news, và hủy routing social của lượt trước nếu user đã đổi chủ đề."
     parameters:
       type: object
       properties:
@@ -76,6 +76,54 @@ tools:
         template: {type: string, enum: [brief, sections, bullets, thread, daily_ai_vn], default: "sections", description: "Khuôn"}
         headline: {type: string, default: "", description: "Tiêu đề"}
       required: [items, template]
+
+  - name: extract_links
+    description: "Trích xuất các URL HTTP/HTTPS duy nhất từ một đoạn văn bản; không tải URL."
+    parameters:
+      type: object
+      properties:
+        text: {type: string, default: "", description: "Văn bản cần tìm URL"}
+      required: [text]
+
+  - name: text_stats
+    description: "Đếm ký tự, từ, câu và ước tính thời gian đọc của văn bản đã có; không tìm kiếm dữ liệu."
+    parameters:
+      type: object
+      properties:
+        text: {type: string, default: "", description: "Văn bản cần thống kê"}
+      required: [text]
+
+  - name: detect_language
+    description: "Đưa ra gợi ý ngôn ngữ vi, en hoặc unknown cho văn bản đã có; chỉ là phân loại nhẹ, không dịch văn bản."
+    parameters:
+      type: object
+      properties:
+        text: {type: string, default: "", description: "Văn bản cần nhận diện"}
+      required: [text]
+
+  - name: relevance_rank
+    description: "Xếp hạng các research item đã thu thập theo số query term xuất hiện trong title và summary; không fetch dữ liệu mới."
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          default: []
+          description: "Các item đã thu thập"
+          items: {type: object}
+        query: {type: string, default: "", description: "Chủ đề cần xếp hạng"}
+        top_k: {type: integer, default: 5, description: "Số item trả về"}
+      required: [items, query]
+
+  - name: quote_extract
+    description: "Lấy nguyên văn các câu trong văn bản đã có chứa keyword; không tự viết hoặc sửa nội dung nguồn."
+    parameters:
+      type: object
+      properties:
+        text: {type: string, default: "", description: "Văn bản nguồn"}
+        keywords: {type: array, default: [], items: {type: string}, description: "Các từ khóa cần tìm"}
+        max_quotes: {type: integer, default: 5, description: "Số câu tối đa"}
+      required: [text, keywords]
 
   # ---------------- Bonus tools ----------------
   - name: send

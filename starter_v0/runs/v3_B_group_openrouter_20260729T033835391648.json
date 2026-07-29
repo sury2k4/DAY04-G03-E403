@@ -1,0 +1,708 @@
+{
+  "run_id": "v3_B_group_openrouter_20260729T033835391648",
+  "version": "v3",
+  "artifact_version": "v3+p2c3a425d25a9+teca85e2dca03",
+  "prompt_hash": "2c3a425d25a9a6b5379b067c82ab9ae3a93f8970b98be6537fde6c1a5dc2bef6",
+  "tools_hash": "eca85e2dca03bf9829e10106cc0a2e38d12f3dbe4f453e579e0552bd52fa1dc1",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "/home/minh/projects/DAY04-G03-E403/starter_v0/artifacts/system_prompt.md",
+  "tools": "/home/minh/projects/DAY04-G03-E403/starter_v0/artifacts/tools.yaml",
+  "eval_cases": "data/eval_group.json",
+  "dataset_id": "day04_v2_team_research_eval",
+  "dataset_role": "team",
+  "description": "Team-authored eval for deterministic research analysis tools and multi-turn boundaries.",
+  "generated_at": "2026-07-29T03:38:35",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 9,
+    "case_accuracy": 0.9,
+    "tool_routing_accuracy": 0.9,
+    "argument_accuracy": 0.9,
+    "multiturn_accuracy": 0.8,
+    "failure_counts": {
+      "missing_info": 1
+    },
+    "observed_mismatch_counts": {
+      "missing_tool_call": 1
+    }
+  },
+  "results": [
+    {
+      "id": "G01_extract_links",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Trích URL từ văn bản có sẵn mà không gọi fetch hoặc lookup."
+      },
+      "input": "Trích xuất các đường link trong đoạn này: Xem https://example.com/a và https://openai.com/research.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "extract_links",
+            "args": {
+              "text": "Xem https://example.com/a và https://openai.com/research."
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "extract_links",
+            "args": {
+              "text": "Xem https://example.com/a và https://openai.com/research."
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "extract_links",
+          "args": {
+            "text": "Xem https://example.com/a và https://openai.com/research."
+          },
+          "result": {
+            "tool": "extract_links",
+            "links": [
+              "https://example.com/a",
+              "https://openai.com/research"
+            ],
+            "link_count": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_text_stats",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Dùng analyzer local để thống kê văn bản, không tìm dữ liệu mới."
+      },
+      "input": "Đếm số từ và số câu của đoạn này: AI đang thay đổi nghiên cứu. Agent giúp tìm nguồn nhanh hơn.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "text_stats",
+            "args": {
+              "text": "AI đang thay đổi nghiên cứu. Agent giúp tìm nguồn nhanh hơn."
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "text_stats",
+            "args": {
+              "text": "AI đang thay đổi nghiên cứu. Agent giúp tìm nguồn nhanh hơn."
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "text_stats",
+          "args": {
+            "text": "AI đang thay đổi nghiên cứu. Agent giúp tìm nguồn nhanh hơn."
+          },
+          "result": {
+            "tool": "text_stats",
+            "character_count": 60,
+            "word_count": 12,
+            "sentence_count": 2,
+            "reading_minutes": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_detect_language",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Nhận diện ngôn ngữ local thay vì gọi web search hoặc dịch vụ bên ngoài."
+      },
+      "input": "Nhận diện ngôn ngữ của câu này: Đây là một bản tin nghiên cứu về AI.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "detect_language",
+            "args": {
+              "text": "Đây là một bản tin nghiên cứu về AI."
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "detect_language",
+            "args": {
+              "text": "Đây là một bản tin nghiên cứu về AI."
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "detect_language",
+          "args": {
+            "text": "Đây là một bản tin nghiên cứu về AI."
+          },
+          "result": {
+            "tool": "detect_language",
+            "language": "vi",
+            "confidence": 0.68
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_relevance_rank",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Xếp hạng dữ liệu đã có theo query mà không fetch nguồn mới."
+      },
+      "input": "Xếp hạng các item sau theo mức liên quan đến AI: item 1 có title 'AI research' và summary 'new model'; item 2 có title 'Cooking' và summary 'recipes'.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "relevance_rank",
+            "args": {
+              "query": "AI"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "relevance_rank",
+            "args": {
+              "items": [
+                {
+                  "title": "AI research",
+                  "summary": "new model"
+                },
+                {
+                  "title": "Cooking",
+                  "summary": "recipes"
+                }
+              ],
+              "query": "AI",
+              "top_k": 2
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "relevance_rank",
+          "args": {
+            "items": [
+              {
+                "title": "AI research",
+                "summary": "new model"
+              },
+              {
+                "title": "Cooking",
+                "summary": "recipes"
+              }
+            ],
+            "query": "AI",
+            "top_k": 2
+          },
+          "result": {
+            "tool": "relevance_rank",
+            "query": "AI",
+            "items": [
+              {
+                "title": "AI research",
+                "summary": "new model",
+                "relevance_score": 1
+              },
+              {
+                "title": "Cooking",
+                "summary": "recipes",
+                "relevance_score": 0
+              }
+            ],
+            "item_count": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_quote_extract",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Trích dẫn nguyên văn theo keyword và giới hạn số câu."
+      },
+      "input": "Lấy tối đa 2 câu có chứa từ khóa 'AI' từ đoạn này: AI is useful. Weather is clear. AI helps research.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "quote_extract",
+            "args": {
+              "keywords": [
+                "AI"
+              ],
+              "max_quotes": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "quote_extract",
+            "args": {
+              "text": "AI is useful. Weather is clear. AI helps research.",
+              "keywords": [
+                "AI"
+              ],
+              "max_quotes": 2
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "quote_extract",
+          "args": {
+            "text": "AI is useful. Weather is clear. AI helps research.",
+            "keywords": [
+              "AI"
+            ],
+            "max_quotes": 2
+          },
+          "result": {
+            "tool": "quote_extract",
+            "quotes": [
+              "AI is useful.",
+              "AI helps research."
+            ],
+            "quote_count": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_missing_url_after_context",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Không tự đoán URL khi user yêu cầu tóm tắt bài nhưng chưa cung cấp link."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mình muốn nghiên cứu một bài viết về AI."
+        },
+        {
+          "role": "user",
+          "content": "Tóm tắt bài này giúp mình."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cung cấp URL của bài viết mà bạn muốn tóm tắt không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cung cấp URL của bài viết mà bạn muốn tóm tắt không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể cung cấp URL của bài viết mà bạn muốn tóm tắt không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_missing_social_account",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Không đoán tài khoản khi yêu cầu timeline thiếu người hoặc handle."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi cần theo dõi tin trên mạng xã hội."
+        },
+        {
+          "role": "user",
+          "content": "Tóm tắt 5 tweet mới nhất giúp mình."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "tin tức",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call social_search"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "tin tức",
+            "limit": 5
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "tin tức",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "The Senate has confirmed Jay Clayton to replace Tulsi Gabbard as Director of National Intelligence in a 51-47 party-line",
+                "summary": "The Senate has confirmed Jay Clayton to replace Tulsi Gabbard as Director of National Intelligence in a 51-47 party-line vote. https://t.co/FSnDFyRAWc",
+                "url": "https://x.com/duchoang73/status/2082309236655329312",
+                "source": "@duchoang73",
+                "date": "Wed Jul 29 03:36:24 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "1"
+                }
+              },
+              {
+                "title": "🐋 Quá đỉnh luôn anh @NeutralViewLab ơi!  ",
+                "summary": "🐋 Quá đỉnh luôn anh @NeutralViewLab ơi!  \nWhale short $SKHX lãi hơn 10 triệu + 1.23 triệu funding fee đúng kiểu “hốt bạc” chuẩn chỉ! 🔥  \n\nBài phân tích của anh siêu sắc, vừa chỉ ra sức mạnh của vị thế short khi xu hướng giảm rõ ràng, vừa nhắc nhở rủi ro đòn bẩy cực kỳ thực tế. Đọc xong thấy rõ ràng hơn về cách đọc on-chain và thanh khoản trên Hyperliquid luôn.  \n\nCảm ơn anh đã chia sẻ góc nhìn trung lập và chất lượng như thế này mỗi ngày. Tiếp tục up content đỉnh cao nhé, cộng đồng VN đang học hỏi rất nhiều từ anh đó! 💪📈  \n\nNFA nhưng đọc bài anh thì luôn thấy tự tin hơn hẳn! 🚀  \n#SKHX #Hyperliquid",
+                "url": "https://x.com/DigitTrad2407/status/2082308859645833303",
+                "source": "@DigitTrad2407",
+                "date": "Wed Jul 29 03:34:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "33"
+                }
+              },
+              {
+                "title": "Ancient Lessons #05",
+                "summary": "Ancient Lessons #05\n95% người sẽ phá bỏ nó ngay lập tức\nNhưng chính \"lỗi thiết kế\" ấy lại trở thành kỳ quan nổi tiếng thế giới.\n\nNăm 1173, Tháp nghiêng Pisa bắt đầu được xây dựng.\nChỉ sau vài tầng đầu tiên, nền đất yếu khiến cả tòa tháp nghiêng sang một bên.\n\nAi cũng nghĩ đó là một thất bại\nMột lỗi thiết kế\nMột công trình đáng lẽ không nên tồn tại.\n\nNhưng người ta không phá bỏ\nHọ điều chỉnh\nHọ gia cố\nHọ kiên nhẫn xây tiếp suốt nhiều thế hệ.\n\nHơn 800 năm sau...\nChính \"khuyết điểm\" ấy lại trở thành biểu tượng nổi tiếng khắp thế giới.\n\nĐiều khiến mình suy nghĩ không phải là độ nghiêng của tòa tháp.\n\nMà là cách con người đối diện với sai lầm.\n\nCrypto cũng vậy.\n\nHầu như không ai đầu tư mà chưa từng mua đỉnh\nChưa từng bán đáy\nChưa từng đặt niềm tin sai chỗ.\n\nSai lầm không quyết định tương lai của bạn\nCách bạn phản ứng sau sai lầm mới quyết định điều đó.\n\nThị trường hiếm khi thưởng cho người chưa từng vấp ngã.\nNó thường thưởng cho những người biết sửa sai, quản trị rủi ro và tiếp tục tiến về phía trước.\n\nĐôi khi...\n\nĐiều khiến bạn khác biệt không phải là sự hoàn hảo.\n\nMà là khả năng đứng vững với những \"độ nghiêng\" của chính mình.\n\nAncient Lessons. Modern Perspective.",
+                "url": "https://x.com/Everything689/status/2082307486493925876",
+                "source": "@Everything689",
+                "date": "Wed Jul 29 03:29:26 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "23"
+                }
+              },
+              {
+                "title": "🔥 Tuyệt vời quá @nguyen_liam1611 ơi!  ",
+                "summary": "🔥 Tuyệt vời quá @nguyen_liam1611 ơi!  \n\nThành quả +299 người bạn mới sau một ngày cày cuốc hết mình thật ấn tượng 🚀  \nDù thiếu đúng 1 người so với mục tiêu 300 và có 33 người rời đi, nhưng con số này vẫn cho thấy sự nỗ lực chân thành và sức hút mạnh mẽ của bạn trên X.  \n\nCảm ơn bạn đã chia sẻ hành trình này – những người bạn mới sẽ cùng đồng hành, còn những người cũ vẫn luôn ở đây ủng hộ bạn ❤️  \nHôm nay tiếp tục chinh phục những cột mốc mới nhé! Mình tin bạn sẽ vượt qua 300, rồi 500, 1000 một cách vững chắc 💪✨  \n\nCố lên, Liam! Cộng đồng đang dõi theo và cổ vũ bạn hết mình 🙌",
+                "url": "https://x.com/DigitTrad2407/status/2082306270267126098",
+                "source": "@DigitTrad2407",
+                "date": "Wed Jul 29 03:24:36 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "8"
+                }
+              },
+              {
+                "title": "@CoderJunkie khuya nay coi bộ căng à bro, tin tức công bố lãi suất",
+                "summary": "@CoderJunkie khuya nay coi bộ căng à bro, tin tức công bố lãi suất",
+                "url": "https://x.com/77bncvbsdcg/status/2082306247785918531",
+                "source": "@77bncvbsdcg",
+                "date": "Wed Jul 29 03:24:31 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "2"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_cancel_side_effect",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Lượt mới nhất hủy hành động nhạy cảm và không gọi send hoặc clarify."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin này lên Telegram giúp mình."
+        },
+        {
+          "role": "user",
+          "content": "Thôi, không gửi nữa. Chỉ nói cho mình agent có thể làm gì."
+        }
+      ],
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Tôi là một trợ lý nghiên cứu, có thể hỗ trợ bạn trong các nhiệm vụ nghiên cứu như tìm kiếm thông tin trên web, cập nhật tin tức hiện tại, tìm kiếm bài đăng trên mạng xã hội, và cung cấp các tài liệu nghiên cứu đã được phê duyệt. Nếu bạn có yêu cầu cụ thể nào, hãy cho tôi biết!",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G09_switch_to_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Yêu cầu mới nhất đọc URL phải hủy routing lookup của lượt trước."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin AI hôm nay trên web."
+        },
+        {
+          "role": "user",
+          "content": "Đọc bài này giúp mình: https://example.com/article"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com/article"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com/article"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://example.com/article"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://example.com/article",
+            "items": [
+              {
+                "title": "Example Domain",
+                "url": "https://example.com/article",
+                "source": "example.com",
+                "summary": "# Example Domain\n\nThis domain is for use in documentation examples without needing permission. Avoid use in operations.\n\n[Learn more](https://iana.org/domains/example)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_switch_to_local_analysis",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Lượt mới nhất chuyển từ social search sang local text analysis."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tweet mới nhất về GPT-5."
+        },
+        {
+          "role": "user",
+          "content": "Bây giờ đếm số từ của đoạn này: AI agents help research teams."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "text_stats",
+            "args": {
+              "text": "AI agents help research teams."
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "text_stats",
+            "args": {
+              "text": "AI agents help research teams."
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "text_stats",
+          "args": {
+            "text": "AI agents help research teams."
+          },
+          "result": {
+            "tool": "text_stats",
+            "character_count": 30,
+            "word_count": 5,
+            "sentence_count": 1,
+            "reading_minutes": 1
+          }
+        }
+      ]
+    }
+  ]
+}
