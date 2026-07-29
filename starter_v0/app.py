@@ -46,6 +46,123 @@ with st.sidebar:
 st.title("🔎 Research Agent — Day04 G03")
 st.caption("UI tái sử dụng `run_model_tool_loop` từ chat.py — cùng agent loop với CLI và eval.")
 
+tab_chat, tab_evidence, tab_compare = st.tabs(["💬 Chat", "📊 Evidence v0→v3", "⚖️ So sánh version"])
+
+with tab_evidence:
+    st.subheader("Câu chuyện tối ưu qua 4 version (từ runs/*.json thật)")
+    runs_dir = ROOT / "runs"
+    run_rows: list[dict[str, Any]] = []
+    for run_file in sorted(runs_dir.glob("*.json")):
+        try:
+            payload = json.loads(run_file.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        summary = payload.get("summary", {})
+        run_rows.append({
+            "version": payload.get("version"),
+            "suite": payload.get("suite"),
+            "case_accuracy": summary.get("case_accuracy"),
+            "routing": summary.get("tool_routing_accuracy"),
+            "args": summary.get("argument_accuracy"),
+            "multiturn": summary.get("multiturn_accuracy"),
+            "passed": f"{summary.get('passed_cases')}/{summary.get('total_cases')}",
+            "provider_errors": summary.get("provider_error_cases"),
+            "artifact_version": payload.get("artifact_version"),
+            "run_file": run_file.name,
+        })
+    if not run_rows:
+        st.info("Chưa có run nào trong runs/. Chạy run_eval.py trước.")
+    else:
+        base_rows = [r for r in run_rows if r["suite"] == "base"]
+        latest_by_version: dict[str, dict[str, Any]] = {}
+        for row in base_rows:
+            latest_by_version[row["version"]] = row  # sorted by filename => latest wins
+        chart_rows = [latest_by_version[v] for v in sorted(latest_by_version)]
+        st.markdown("**Base suite (20 case cố định) — case_accuracy theo version:**")
+        st.bar_chart(
+            {r["version"]: r["case_accuracy"] for r in chart_rows},
+            height=260,
+        )
+        col1, col2, col3, col4 = st.columns(4)
+        story = {
+            "v0": "Baseline: prompt 'đoán bừa' — 14/20",
+            "v1": "Sửa prompt: clarify/confirm/refuse — 19/20",
+            "v2": "Sửa tools.yaml: fix R11, lộ regression — 18/20",
+            "v3": "Map handle + rule multi-turn — 20/20",
+        }
+        for col, ver in zip((col1, col2, col3, col4), ("v0", "v1", "v2", "v3")):
+            row = latest_by_version.get(ver)
+            if row:
+                col.metric(ver, f"{row['case_accuracy']:.2f}", help=story.get(ver, ""))
+        st.markdown("**Tất cả các run (base + group):**")
+        st.dataframe(run_rows, use_container_width=True)
+
+        st.markdown("**Soi chi tiết một run — case nào fail, vì sao:**")
+        selected = st.selectbox("Chọn run file", [r["run_file"] for r in run_rows], index=len(run_rows) - 1)
+        payload = json.loads((runs_dir / selected).read_text(encoding="utf-8"))
+        for item in payload.get("results", []):
+            result = item["result"]
+            icon = "✅" if result.get("passed") else "❌"
+            with st.expander(f"{icon} {item['id']} — {result.get('failure_type') or 'PASS'}"):
+                st.write("**Input:**", item.get("input"))
+                st.write("**Expected:**")
+                st.json(item.get("expect"), expanded=False)
+                st.write("**Actual tool calls:**")
+                st.json(result.get("actual_tool_calls"), expanded=False)
+                if result.get("failures"):
+                    st.error("; ".join(result["failures"]))
+
+with tab_compare:
+    st.subheader("Cùng một case — hành vi thay đổi qua từng version")
+    runs_dir = ROOT / "runs"
+    version_results: dict[str, dict[str, Any]] = {}  # version -> case_id -> result item
+    for run_file in sorted(runs_dir.glob("*.json")):
+        try:
+            payload = json.loads(run_file.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if payload.get("suite") != "base":
+            continue
+        version_results[payload.get("version")] = {
+            item["id"]: item for item in payload.get("results", [])
+        }
+    if not version_results:
+        st.info("Chưa có base run nào trong runs/.")
+    else:
+        versions = sorted(version_results)
+        all_case_ids = sorted({cid for cases in version_results.values() for cid in cases})
+        interesting = [c for c in all_case_ids if any(
+            not version_results[v].get(c, {}).get("result", {}).get("passed", True)
+            for v in versions if c in version_results[v]
+        )]
+        st.caption(f"Các case từng fail ở ít nhất một version: {', '.join(interesting)}")
+        case_id = st.selectbox("Chọn case", all_case_ids, index=all_case_ids.index("R10_missing_handle") if "R10_missing_handle" in all_case_ids else 0)
+
+        sample = next((version_results[v][case_id] for v in versions if case_id in version_results[v]), None)
+        if sample:
+            st.markdown("**Input:**")
+            st.json(sample.get("input"), expanded=False) if isinstance(sample.get("input"), list) else st.info(sample.get("input"))
+            st.markdown("**Expected:**")
+            st.json(sample.get("expect"), expanded=False)
+
+        cols = st.columns(len(versions))
+        for col, ver in zip(cols, versions):
+            item = version_results[ver].get(case_id)
+            with col:
+                st.markdown(f"### {ver}")
+                if not item:
+                    st.caption("không có trong run")
+                    continue
+                result = item["result"]
+                if result.get("passed"):
+                    st.success("PASS")
+                else:
+                    st.error(f"FAIL — {result.get('failure_type')}")
+                st.markdown("Tool calls thực tế:")
+                st.json(result.get("actual_tool_calls") or "không gọi tool", expanded=True)
+                if result.get("failures"):
+                    st.caption("Lỗi: " + "; ".join(result["failures"]))
+
 if "history" not in st.session_state:
     st.session_state.history = []  # [{role, content}]
 if "turns" not in st.session_state:
@@ -82,8 +199,9 @@ def render_turn(turn: dict[str, Any]) -> None:
                         st.json(result, expanded=False)
 
 
-for turn in st.session_state.turns:
-    render_turn(turn)
+with tab_chat:
+    for turn in st.session_state.turns:
+        render_turn(turn)
 
 user_text = st.chat_input("Nhập yêu cầu research...")
 if user_text:
