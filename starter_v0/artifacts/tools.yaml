@@ -9,51 +9,51 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Hỏi lại người dùng khi thiếu thông tin bắt buộc (tên tài khoản, URL...) hoặc khi cần xác nhận trước hành động nhạy cảm (gửi/đăng). LUÔN điền response_type tường minh: 'text' khi hỏi xin thông tin còn thiếu, 'yes_no' khi xin xác nhận trước khi send, 'choice' khi đưa các lựa chọn (kèm options)."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
-      required: [question]
+        question: {type: string, default: "", description: "Câu hỏi gửi cho người dùng"}
+        response_type: {type: string, enum: [text, yes_no, choice], description: "Bắt buộc điền: text = xin thông tin thiếu; yes_no = xin xác nhận hành động; choice = chọn từ options"}
+        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn, chỉ dùng khi response_type=choice"}
+      required: [question, response_type]
 
   - name: timeline
-    description: "Lấy các bài đăng gần đây."
+    description: "Lấy các bài đăng gần đây của MỘT tài khoản cụ thể mà người dùng nêu rõ. Không tự đoán tên tài khoản; nếu người dùng không nói của ai, dùng clarify. Khác social_search: tool này theo tài khoản, không theo từ khóa."
     parameters:
       type: object
       properties:
-        screenname: {type: string, default: "", description: "Tên tài khoản"}
-        limit: {type: integer, default: 5, description: "Số lượng"}
+        screenname: {type: string, default: "", description: "Tên tài khoản (không kèm @), lấy đúng từ lời người dùng"}
+        limit: {type: integer, default: 5, description: "Số bài đăng; lấy đúng số người dùng yêu cầu"}
       required: [screenname]
 
   - name: social_search
-    description: "Tìm trên mạng xã hội."
+    description: "Tìm bài đăng mạng xã hội theo TỪ KHÓA/chủ đề (không phải theo tài khoản — việc đó dùng timeline). Dùng search_type=Top khi người dùng muốn bài nổi bật/phổ biến, Latest khi muốn mới nhất."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Từ khóa"}
-        search_type: {type: string, enum: [Latest, Top], default: "Latest", description: "Cách sắp xếp"}
-        limit: {type: integer, default: 5, description: "Số lượng"}
+        query: {type: string, default: "", description: "Từ khóa ngắn lấy từ yêu cầu, không thêm từ thừa"}
+        search_type: {type: string, enum: [Latest, Top], default: "Latest", description: "Latest = mới nhất; Top = nổi bật nhất"}
+        limit: {type: integer, default: 5, description: "Số bài; lấy đúng số người dùng yêu cầu"}
       required: [query]
 
   - name: lookup
-    description: "Tra cứu thông tin trên internet."
+    description: "Tìm kiếm web tổng quát hoặc tin tức. Quy ước: query chỉ chứa từ khóa chủ đề (ví dụ 'AI'), KHÔNG nhét chữ 'tin tức/news' vào query — thay vào đó set topic=news. Khi người dùng nói 'hôm nay' dùng timeframe=day, 'tuần này' = week, 'tháng này' = month."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Truy vấn"}
-        topic: {type: string, enum: [general, news], default: "general", description: "Phân loại"}
-        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "Khoảng thời gian"}
+        query: {type: string, default: "", description: "Từ khóa chủ đề ngắn, không chứa từ chỉ loại/thời gian"}
+        topic: {type: string, enum: [general, news], default: "general", description: "news khi người dùng hỏi tin tức/thời sự; general cho tra cứu thường"}
+        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "day=hôm nay, week=tuần, month=tháng, year=năm"}
         max_results: {type: integer, default: 5, description: "Số kết quả"}
       required: [query]
 
   - name: fetch
-    description: "Lấy nội dung từ một địa chỉ."
+    description: "Đọc nội dung một URL cụ thể do người dùng cung cấp. Chỉ dùng khi có URL thật trong hội thoại; không bao giờ tự bịa URL — thiếu URL thì dùng clarify."
     parameters:
       type: object
       properties:
-        url: {type: string, default: "", description: "Địa chỉ"}
+        url: {type: string, default: "", description: "URL đầy đủ do người dùng đưa"}
       required: [url]
 
   - name: format
@@ -77,14 +77,23 @@ tools:
         headline: {type: string, default: "", description: "Tiêu đề"}
       required: [items, template]
 
-  # ---------------- Bonus tools ----------------
-  - name: send
-    description: "Gửi một đoạn văn bản đi."
+  - name: wiki
+    description: "Tra cứu Wikipedia để lấy tóm tắt nền tảng về một khái niệm/người/tổ chức. Dùng cho câu hỏi kiểu 'X là gì/là ai'. KHÔNG dùng cho tin tức mới (dùng lookup topic=news) hay bài đăng mạng xã hội."
     parameters:
       type: object
       properties:
-        text: {type: string, default: "", description: "Nội dung"}
-        confirmed: {type: boolean, default: false, description: "Cờ xác nhận"}
+        topic: {type: string, default: "", description: "Tên khái niệm/người/tổ chức cần tra, giữ ngắn gọn"}
+        lang: {type: string, enum: [vi, en], default: "vi", description: "Ngôn ngữ trang; mặc định tiếng Việt, tự fallback sang en"}
+      required: [topic]
+
+  # ---------------- Bonus tools ----------------
+  - name: send
+    description: "Gửi text lên kênh Telegram. HÀNH ĐỘNG NHẠY CẢM: chỉ được gọi SAU khi người dùng đã xác nhận yes qua clarify(response_type=yes_no). Không dùng để trả lời câu hỏi thông thường."
+    parameters:
+      type: object
+      properties:
+        text: {type: string, default: "", description: "Nội dung gửi đi"}
+        confirmed: {type: boolean, default: false, description: "true chỉ khi người dùng đã xác nhận rõ ràng"}
       required: [text]
 
   - name: policy

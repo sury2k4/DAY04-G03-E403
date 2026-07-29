@@ -1,7 +1,138 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Template để NHÓM tự viết đúng 10 case: 5 single-turn dùng query và 5 multi-turn dùng turns. Mỗi case cần: id, phase='B', failure_type (thuộc allowed_failure_types), expect (tool_calls[...] hoặc no_tool=true), và metadata.what_it_tests. File để trống có chủ đích vì mỗi nhóm phải tự thiết kế các case này.",
+  "description": "10 case do team G03 tự viết: 5 single-turn (G01-G05) + 5 multi-turn (G06-G10). Phủ cả 6 failure_type và tool mới wiki.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_wiki_definition",
+      "phase": "B",
+      "query": "Anthropic là công ty gì vậy?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "wiki", "args": {"topic": "Anthropic"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Câu hỏi nền tảng 'X là gì' phải route sang wiki, không phải lookup/social_search."}
+    },
+    {
+      "id": "G02_news_vs_wiki",
+      "phase": "B",
+      "query": "Tin tức về Anthropic hôm nay có gì mới?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "lookup", "args": {"query": "Anthropic", "topic": "news", "timeframe": "day"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Cùng chủ đề Anthropic nhưng hỏi tin MỚI phải dùng lookup topic=news timeframe=day, không dùng wiki."}
+    },
+    {
+      "id": "G03_handle_mapping",
+      "phase": "B",
+      "query": "Lấy 4 tweet mới nhất của Elon Musk",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {"name": "timeline", "args": {"screenname": "elonmusk", "limit": 4}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Map display name 'Elon Musk' sang handle thật elonmusk và lấy đúng limit=4."}
+    },
+    {
+      "id": "G04_send_needs_confirm",
+      "phase": "B",
+      "query": "Soạn xong rồi thì gửi luôn bản tin AI này lên kênh Telegram nhé",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "clarify", "args": {"response_type": "yes_no"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Dù user nói 'gửi luôn', hành động nhạy cảm vẫn phải xin xác nhận yes_no trước khi send."}
+    },
+    {
+      "id": "G05_out_of_scope_translate",
+      "phase": "B",
+      "query": "Dịch giúp mình đoạn văn này sang tiếng Nhật: 'Hôm nay trời đẹp quá'",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Yêu cầu dịch thuật nằm ngoài phạm vi research: từ chối, không gọi tool nào."}
+    },
+    {
+      "id": "G06_clarify_then_wiki",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tra giúp mình thông tin nền về công ty đó"},
+        {"role": "user", "content": "À, công ty Mistral AI ấy"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {"name": "wiki", "args": {"topic": "Mistral AI"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Multi-turn: sau khi user bổ sung tên công ty ở turn cuối, agent dùng wiki với topic từ turn đó."}
+    },
+    {
+      "id": "G07_switch_topic_search",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm tweet về Gemini"},
+        {"role": "user", "content": "Thôi đổi sang chủ đề Claude đi, lấy bài nổi bật nhất"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {"name": "social_search", "args": {"query": "Claude", "search_type": "Top"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Multi-turn đổi chủ đề: chỉ tìm Claude (không phải Gemini) và 'nổi bật nhất' phải map sang search_type=Top."}
+    },
+    {
+      "id": "G08_cancel_then_capability",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Lấy tweet của sama giúp mình"},
+        {"role": "user", "content": "Khoan, chưa cần nữa"},
+        {"role": "user", "content": "Bạn làm được những gì nhỉ?"}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "User đã hủy yêu cầu cũ; turn cuối chỉ hỏi khả năng nên không được gọi tool nào."}
+    },
+    {
+      "id": "G09_confirmed_send",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Đăng bản tin 'AI Daily 29/7' lên Telegram nhé"},
+        {"role": "assistant", "content": "Bạn xác nhận gửi bản tin 'AI Daily 29/7' lên Telegram chứ? (yes/no)"},
+        {"role": "user", "content": "Yes, gửi đi"}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "send", "args": {"confirmed": true}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Sau khi user đã xác nhận yes rõ ràng, agent phải gọi send với confirmed=true chứ không hỏi lại lần nữa."}
+    },
+    {
+      "id": "G10_url_supplied_later",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Đọc giúp mình bài viết này"},
+        {"role": "assistant", "content": "Bạn cho mình xin URL của bài viết nhé?"},
+        {"role": "user", "content": "Đây nhé: https://openai.com/index/gpt-4o"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {"name": "fetch", "args": {"url": "https://openai.com/index/gpt-4o"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Multi-turn: sau khi user cung cấp URL thật, agent fetch đúng URL đó thay vì hỏi tiếp hay bịa URL."}
+    }
+  ]
 }

@@ -1,0 +1,751 @@
+{
+  "run_id": "v3_B_group_openrouter_20260729T110228198568",
+  "version": "v3",
+  "artifact_version": "v3+pa6014fe88e80+tacadfdf55c94",
+  "prompt_hash": "a6014fe88e80e88a25e3ee4a470f3272233d3c2d5ce28258c7c0f4aa226a9b8c",
+  "tools_hash": "acadfdf55c940e27a6a4b4b9f585f2594f57bf351246677580a9e01be8141ecd",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "C:\\Users\\admin\\OneDrive\\Desktop\\lab4\\DAY04-G03-E403\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\admin\\OneDrive\\Desktop\\lab4\\DAY04-G03-E403\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "10 case do team G03 tự viết: 5 single-turn (G01-G05) + 5 multi-turn (G06-G10). Phủ cả 6 failure_type và tool mới wiki.",
+  "generated_at": "2026-07-29T11:02:28",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 10,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_wiki_definition",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Câu hỏi nền tảng 'X là gì' phải route sang wiki, không phải lookup/social_search."
+      },
+      "input": "Anthropic là công ty gì vậy?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wiki",
+            "args": {
+              "topic": "Anthropic"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wiki",
+            "args": {
+              "topic": "Anthropic"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wiki",
+          "args": {
+            "topic": "Anthropic"
+          },
+          "result": {
+            "tool": "wiki_summary",
+            "topic": "Anthropic",
+            "lang": "vi",
+            "items": [
+              {
+                "title": "Anthropic",
+                "url": "https://vi.wikipedia.org/wiki/Anthropic",
+                "source": "vi.wikipedia.org",
+                "summary": "Anthropic PBC là một công ty trí tuệ nhân tạo của Hoa Kỳ, đặt trụ sở tại San Francisco, California. Công ty phát triển một dòng mô hình ngôn ngữ lớn (LLM) mang tên Claude và tập trung vào lĩnh vực an toàn AI. Anthropic được thành lập vào năm 2021 bởi một số cựu thành viên của OpenAI, trong đó có hai anh em Daniela Amodei và Dario Amodei, lần lượt giữ chức chủ tịch và tổng giám đốc điều hành. Anthropic là công ty tư nhân và tính đến tháng 5 năm 2026, công ty được ước tính có giá trị 965 tỷ đô la Mỹ.",
+                "description": "Công ty trí tuệ nhân tạo của Mỹ"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_news_vs_wiki",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Cùng chủ đề Anthropic nhưng hỏi tin MỚI phải dùng lookup topic=news timeframe=day, không dùng wiki."
+      },
+      "input": "Tin tức về Anthropic hôm nay có gì mới?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "Anthropic",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "Anthropic",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "Anthropic",
+            "topic": "news",
+            "timeframe": "day"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "Anthropic",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Anthropic blows past Starbucks, McDonald's amid AI boom - Axios",
+                "url": "https://www.axios.com/2026/07/28/anthropic-openai-revenue-mcdonalds-starbucks-yum",
+                "source": "axios.com",
+                "summary": "AI revenue is accelerating so fast that it's starting to dwarf some of the world's most recognizable brands. **Why it matters:** AI infrastructure spending forecasts in the trillions of dollars start to make at least a little more sense when investors see how they're paying off. **By the numbers:** OpenAI and Anthropic, combined, are on track for an annual revenue rate of about $120 billion, \"Key Context\" Substack author Tae Kim noted on Monday, via data from AI investment research platform Funda. * Anthropic makes up about 60% of that, given the company's lead with corporate customers (a lead that OpenAI is working to shrink). * Both would land in the Fortune 500's top 100 companies by revenue at those levels. **Stunning stat:** At around $71 billion in estimated annual revenue, Anthropic would best Starbucks ($37.2 billion) and McDonald's ($26.9 billion) combined. * It would almost top both of them plus Taco Bell and KFC parent Yum Brands as well.",
+                "score": 0.5863576
+              },
+              {
+                "title": "Anthropic, OpenAI collaborate with Trump on AI model evaluation plan - Crypto Briefing",
+                "url": "https://cryptobriefing.com/anthropic-openai-collaborate-with-trump-on-ai-model-evaluation-plan/",
+                "source": "cryptobriefing.com",
+                "summary": "Get the live feed at vera.cryptobriefing.com. # Anthropic, OpenAI collaborate with Trump on AI model evaluation plan. Anthropic and OpenAI are reportedly working closely with the Trump administration to finalize a federal government plan for AI model evaluations. This plan focuses on reviewing frontier AI models for cybersecurity and national-security risks prior to their public release, as part of a broader initiative directed by a recent executive order. The executive order mandates the creation of a classified benchmarking process and a framework that allows developers to grant the government access to advanced models up to 30 days before their release. * Markets suggest increased confidence in a federal AI review order by the July 31 deadline, consistent with Trump’s active involvement in finalizing the plan. * The collaboration between Anthropic, OpenAI, and the Trump administration indicates progress toward a more formalized AI model-evaluation framework. *Get live prediction-market analysis, powered by Vera. Live prediction-market signals and analysis, powered by Vera.",
+                "score": 0.56661874
+              },
+              {
+                "title": "MCP just got its biggest update ever — here’s what changes for AI agents - VentureBeat",
+                "url": "https://venturebeat.com/infrastructure/mcp-just-got-its-biggest-update-ever-heres-what-changes-for-ai-agents",
+                "source": "venturebeat.com",
+                "summary": "The Model Context Protocol, the open standard that has quietly become the connective tissue between AI agents and the world's software, is getting its largest update since Anthropic released it twenty months ago — a sweeping architectural revision that its maintainers and backers say finally makes agentic AI ready for massive enterprise production deployments. The update, released today under the stewardship of the Agentic AI Foundation (AAIF), a directed fund under the Linux Foundation, finalizes MCP's transition to a fully stateless architecture, hardens its authentication model against a known class of attacks, establishes a formal 12-month deprecation policy, and graduates two headline capabilities — interactive server-rendered interfaces and long-running asynchronous tasks — into official protocol extensions. \"Some people jokingly call it a v2, and I think in spirit that's accurate,\" David Soria Parra, MCP's co-creator and a lead maintainer at Anthropic, told VentureBeat in an exclusive interview.",
+                "score": 0.54956865
+              },
+              {
+                "title": "Anthropic’s Amodei defends open-weight stance following critique from Palantir’s Karp - Fox Business",
+                "url": "https://www.foxbusiness.com/technology/anthropics-amodei-defends-open-weight-stance-following-critique-from-palantirs-karp",
+                "source": "foxbusiness.com",
+                "summary": "Anthropic CEO Dario Amodei pushed back on claims that his AI startup supports a ban on open-weight models to support its competitive position in a letter after Anthropic was notably absent from a letter signed by many leading AI firms. Leading companies in the AI space, including Nvidia, Palantir and others, participated in the letter and announced a partnership in the Open Secure AI Alliance, which looks to develop and share more open technologies to improve security in the AI era as risks can stem from both open and closed models. \"To summarize my and Anthropic's position, we have not and are not advocating for a ban on open-weights models as a category. Amodei's letter was published hours after Palantir CEO Alex Karp, whose company signed the letter supporting the use of open-weight AI models, said in an exclusive interview on FOX Business Network's \"The Claman Countdown\" that resistance to competition could lead to a less dynamic tech industry like in Europe's.",
+                "score": 0.5482629
+              },
+              {
+                "title": "Anthropic's Open-Weight Position: Conceding the Model Layer, Contesting the Compute Floor - FourWeekMBA",
+                "url": "https://fourweekmba.com/ai-anthropic-open-weight-position-compute-floor-distillation/",
+                "source": "fourweekmba.com",
+                "summary": "# Anthropic’s Open-Weight Position: Conceding the Model Layer, Contesting the Compute Floor. Based on Anthropic’s position statement on open-weight models. The company is explicit that it has never advocated a ban on open-weight releases, and it describes open-weight models without dangerous capabilities as a “public good.” It argues against protectionist blanket bans on the grounds that they fail to address genuine national-security concerns: bad actors, Anthropic notes, are unlikely to be operating as legitimate US businesses subject to such rules in the first place. The three resulting policy recommendations are: maintain and tighten chip export controls (no advanced chips or chipmaking equipment to China, with active enforcement against smuggling); crack down on industrial-scale distillation of frontier models — explicitly noting this is not a ban on open weights — while committing to identify and ban accounts distilling Anthropic’s own models; and require mandatory safety testing for all sufficiently capable models, open and closed alike, covering cyber, biological, and alignment risks. Anthropic publishes its open-weight position statement: backs open models as a public good; recommends chip export controls, distillation crackdown, and mandatory safety testing for all capable models.",
+                "score": 0.54317886
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_handle_mapping",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Map display name 'Elon Musk' sang handle thật elonmusk và lấy đúng limit=4."
+      },
+      "input": "Lấy 4 tweet mới nhất của Elon Musk",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 4
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 4
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "elonmusk",
+            "limit": 4
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "elonmusk",
+            "items": [
+              {
+                "title": "RT @finkd: I wrote about why we believe the future is for everyone. More coming about a positive vision for a world with",
+                "summary": "RT @finkd: I wrote about why we believe the future is for everyone. More coming about a positive vision for a world with superintelligence…",
+                "url": "https://x.com/elonmusk/status/2082273427315171520",
+                "source": "@elonmusk",
+                "date": "Wed Jul 29 01:14:06 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1601,
+                  "views": "501485"
+                }
+              },
+              {
+                "title": "We’re sending a ship out to recover Starship",
+                "summary": "We’re sending a ship out to recover Starship",
+                "url": "https://x.com/elonmusk/status/2082244164197183805",
+                "source": "@elonmusk",
+                "date": "Tue Jul 28 23:17:49 +0000 2026",
+                "metrics": {
+                  "favorites": 32911,
+                  "retweets": 3436,
+                  "views": "2817966"
+                }
+              },
+              {
+                "title": "Landing videos of Starship",
+                "summary": "Landing videos of Starship",
+                "url": "https://x.com/elonmusk/status/2082244044261064874",
+                "source": "@elonmusk",
+                "date": "Tue Jul 28 23:17:21 +0000 2026",
+                "metrics": {
+                  "favorites": 10387,
+                  "retweets": 1342,
+                  "views": "1719444"
+                }
+              },
+              {
+                "title": "Stayin’ Alive",
+                "summary": "Stayin’ Alive",
+                "url": "https://x.com/elonmusk/status/2082243900719460745",
+                "source": "@elonmusk",
+                "date": "Tue Jul 28 23:16:46 +0000 2026",
+                "metrics": {
+                  "favorites": 16126,
+                  "retweets": 1814,
+                  "views": "1778985"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_send_needs_confirm",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Dù user nói 'gửi luôn', hành động nhạy cảm vẫn phải xin xác nhận yes_no trước khi send."
+      },
+      "input": "Soạn xong rồi thì gửi luôn bản tin AI này lên kênh Telegram nhé",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có chắc chắn muốn gửi bản tin AI này lên kênh Telegram không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có chắc chắn muốn gửi bản tin AI này lên kênh Telegram không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có chắc chắn muốn gửi bản tin AI này lên kênh Telegram không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_out_of_scope_translate",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Yêu cầu dịch thuật nằm ngoài phạm vi research: từ chối, không gọi tool nào."
+      },
+      "input": "Dịch giúp mình đoạn văn này sang tiếng Nhật: 'Hôm nay trời đẹp quá'",
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Xin lỗi, nhưng tôi chỉ hỗ trợ các tác vụ nghiên cứu. Tôi không thể giúp bạn dịch văn bản.",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G06_clarify_then_wiki",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: sau khi user bổ sung tên công ty ở turn cuối, agent dùng wiki với topic từ turn đó."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tra giúp mình thông tin nền về công ty đó"
+        },
+        {
+          "role": "user",
+          "content": "À, công ty Mistral AI ấy"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wiki",
+            "args": {
+              "topic": "Mistral AI"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wiki",
+            "args": {
+              "topic": "Mistral AI"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wiki",
+          "args": {
+            "topic": "Mistral AI"
+          },
+          "result": {
+            "tool": "wiki_summary",
+            "topic": "Mistral AI",
+            "lang": "vi",
+            "items": [
+              {
+                "title": "Mistral AI",
+                "url": "https://vi.wikipedia.org/wiki/Mistral_AI",
+                "source": "vi.wikipedia.org",
+                "summary": "Mistral AI SAS là một công ty trí tuệ nhân tạo (AI) của Pháp, có trụ sở tại Paris. Được thành lập vào năm 2023, công ty này có các mô hình ngôn ngữ lớn (LLM) với trọng số mở, bao gồm cả các mô hình AI mã nguồn mở và độc quyền. Tính đến năm 2025, công ty được định giá hơn 14 tỷ đô la Mỹ.",
+                "description": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_switch_topic_search",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn đổi chủ đề: chỉ tìm Claude (không phải Gemini) và 'nổi bật nhất' phải map sang search_type=Top."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tweet về Gemini"
+        },
+        {
+          "role": "user",
+          "content": "Thôi đổi sang chủ đề Claude đi, lấy bài nổi bật nhất"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Claude",
+              "search_type": "Top"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Claude",
+              "search_type": "Top",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "Claude",
+            "search_type": "Top",
+            "limit": 5
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "Claude",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "The engineer who built Claude Code just dropped a 28-minute video on how to write prompts that actually work.",
+                "summary": "The engineer who built Claude Code just dropped a 28-minute video on how to write prompts that actually work.\n\nI've seen $300 courses that don't cover what he shows in the first 10 minutes.\n\nCLAUDE.md files, memory shortcuts, parallel sessions, prompting patterns.\n\nWatch it, then read the guide below on the Claude features 99% of users never find.",
+                "url": "https://x.com/AnatoliKopadze/status/2078827490575843583",
+                "source": "@AnatoliKopadze",
+                "date": "Sun Jul 19 13:01:11 +0000 2026",
+                "metrics": {
+                  "favorites": 3446,
+                  "retweets": 656,
+                  "views": "628970"
+                }
+              },
+              {
+                "title": "Anthropic engineer:",
+                "summary": "Anthropic engineer:\n\n\"You're not supposed to prompt Claude. You're supposed to build a system that prompts itself.\"\n\nIn 45 minutes she shows exactly how Anthropic builds agents that remember, fix their own mistakes and get smarter with every run.\n\nThis beats any paid course on agents I've seen.\n\nWatch it, then read the guide on building loops below.",
+                "url": "https://x.com/AnatoliKopadze/status/2080286550005358977",
+                "source": "@AnatoliKopadze",
+                "date": "Thu Jul 23 13:38:58 +0000 2026",
+                "metrics": {
+                  "favorites": 8808,
+                  "retweets": 1196,
+                  "views": "2062901"
+                }
+              },
+              {
+                "title": "This is nuts.",
+                "summary": "This is nuts.\n\nMark Cuban just said something every young person should hear.\n\nAI agents are going to run through every small and mid-size business in the country.\n\nNot a single one of those owners will know how to build them.\n\nHis advice: learn Claude. Learn agentic workflows. Just learn AI and how it works.\n\nThen go to these businesses and help them — because they won't know how to do any of this.\n\nThey have money to spend. They have deep problems.\n\nThey don't have you.\n\nBut first you need to know how to build agents.\n\nThis is the complete course ↓\n\nBookmark this. This is the opportunity.",
+                "url": "https://x.com/sairahul1/status/2079895735198245346",
+                "source": "@sairahul1",
+                "date": "Wed Jul 22 11:46:00 +0000 2026",
+                "metrics": {
+                  "favorites": 5171,
+                  "retweets": 600,
+                  "views": "1265247"
+                }
+              },
+              {
+                "title": "A 23-YEAR-OLD STUDENT BUILT THIS WORLD WAR II FILM IN JUST ONE NIGHT AND WON THE $1,000,000 BEST AI FILM OF 2026 AWARD",
+                "summary": "A 23-YEAR-OLD STUDENT BUILT THIS WORLD WAR II FILM IN JUST ONE NIGHT AND WON THE $1,000,000 BEST AI FILM OF 2026 AWARD\n\nThis terrifyingly realistic trench battle was created during a single all-nighter.\n\nBypassing multimillion-dollar studio budgets and turning a 23-year-old student into an instant millionaire before sunrise.\n\n> Claude write the tragic World War II story arc & shot list: 20 minutes\n\n> Midjourney render 8K photorealistic trench combat assets: 1 hour\n\n> Sora / Runway turn static battlefield stills into 60fps action: 3 hours\n\n> ElevenLabs overlay cinematic artillery blasts and voice tracks: 30 minutes\n\nHollywood spends $150M and 2 years to shoot this level of cinematic chaos. \n\nA student did it in under 8 hours for less than fifty bucks.\n\nThe entire 1-night $1M AI filmmaking framework is broken down in the article below👇",
+                "url": "https://x.com/doublenickk/status/2080348488789860719",
+                "source": "@doublenickk",
+                "date": "Thu Jul 23 17:45:05 +0000 2026",
+                "metrics": {
+                  "favorites": 3487,
+                  "retweets": 573,
+                  "views": "822173"
+                }
+              },
+              {
+                "title": "Godfather of AI: \"If you sleep well tonight, you may not have understood this lecture.\"",
+                "summary": "Godfather of AI: \"If you sleep well tonight, you may not have understood this lecture.\"\n\nThis 47-minute lecture is the best thing I've seen about AI in the last few months.\n\nHinton built the neural networks behind every AI alive, then quit Google to warn us it's already ahead of us on most cognitive tasks.\n\nDespite that, most people open Claude, type one thing, close the tab and think they're using AI, but they're using maybe 10%.\n\nThe people using the other 90% aren't typing prompts at all. They're running agents in parallel, wired into graphs that check their own work.\n\nWatch the lecture, then read my step-by-step guide on graph engineering below.",
+                "url": "https://x.com/AnatoliKopadze/status/2080988595133755637",
+                "source": "@AnatoliKopadze",
+                "date": "Sat Jul 25 12:08:38 +0000 2026",
+                "metrics": {
+                  "favorites": 1315,
+                  "retweets": 270,
+                  "views": "258893"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_cancel_then_capability",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "User đã hủy yêu cầu cũ; turn cuối chỉ hỏi khả năng nên không được gọi tool nào."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Lấy tweet của sama giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Khoan, chưa cần nữa"
+        },
+        {
+          "role": "user",
+          "content": "Bạn làm được những gì nhỉ?"
+        }
+      ],
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Tôi có thể giúp bạn với các tác vụ nghiên cứu như tìm kiếm bài viết, tin tức, bài đăng trên mạng xã hội, hoặc tra cứu thông tin từ Wikipedia. Nếu bạn cần thông tin cụ thể nào, hãy cho tôi biết!",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G09_confirmed_send",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Sau khi user đã xác nhận yes rõ ràng, agent phải gọi send với confirmed=true chứ không hỏi lại lần nữa."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin 'AI Daily 29/7' lên Telegram nhé"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn xác nhận gửi bản tin 'AI Daily 29/7' lên Telegram chứ? (yes/no)"
+        },
+        {
+          "role": "user",
+          "content": "Yes, gửi đi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "text": "AI Daily 29/7",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "send",
+          "args": {
+            "text": "AI Daily 29/7",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "send_telegram",
+            "error": "RuntimeError",
+            "message": "Missing TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID env var"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_url_supplied_later",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: sau khi user cung cấp URL thật, agent fetch đúng URL đó thay vì hỏi tiếp hay bịa URL."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đọc giúp mình bài viết này"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn cho mình xin URL của bài viết nhé?"
+        },
+        {
+          "role": "user",
+          "content": "Đây nhé: https://openai.com/index/gpt-4o"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/index/gpt-4o"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/index/gpt-4o"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://openai.com/index/gpt-4o"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://openai.com/index/gpt-4o",
+            "items": [
+              {
+                "title": "OpenAI",
+                "url": "https://openai.com/index/gpt-4o",
+                "source": "openai.com",
+                "summary": "OpenAI\n\n# 404\n\nBlank page, open sky\n\nQuestions drift like paper kites\n\nOne kite finds its wind\n\nby [gpt-5.6-sol(opens in a new window)](https://chatgpt.com/?model=gpt-5.6-sol&openaicom-did=0c49d1f0-d92d-4cba-95c1-5ea77f3d5863&openaicom_referred=true)"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
