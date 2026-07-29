@@ -264,6 +264,7 @@ Checklist tối thiểu:
 
 - khóa artifact trước buổi demo;
 - kiểm tra API key, quota, và link demo còn sống;
+- tải lại giao diện một lần để xác nhận phiên demo hiển thị đúng artifact version;
 - mở sẵn logs/run JSON/transcript cần chiếu;
 - chuẩn bị fallback run hoặc fallback transcript nếu mạng chập chờn;
 - không để lộ secrets trong screenshot, log, hoặc poster;
