@@ -7,5 +7,11 @@ requests>=2.31.0
 PyYAML>=6.0
 # Optional arXiv PDF extraction (`paper_text`):
 pypdf>=4.0.0
+<<<<<<< HEAD
 # UI:
 streamlit>=1.30.0
+=======
+# UI Framework:
+streamlit>=1.30.0
+
+>>>>>>> 5fdec78f2576879a16eea036b082eb6d9b60bd50
