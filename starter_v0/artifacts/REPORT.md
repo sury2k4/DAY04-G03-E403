@@ -16,8 +16,9 @@ Research Agent thông minh hỗ trợ tìm tin tức thời sự/web, tra cứu 
 
 **Link dùng thử (truy cập được trong showdown):**
 
-- Localhost UI: `http://localhost:8501`
-- Cloudflare Tunnel: Bật bằng lệnh `cloudflared tunnel --url http://localhost:8501` khi demo từ xa.
+- **Localhost UI**: `http://localhost:8501`
+- **Public Tunnel 1 (Serveo)**: `https://d112e60fd356a89d-203-171-27-42.serveousercontent.com`
+- **Public Tunnel 2 (Localtunnel)**: `https://stale-rats-flash.loca.lt`
 
 ## A2. Tool agent có
 
