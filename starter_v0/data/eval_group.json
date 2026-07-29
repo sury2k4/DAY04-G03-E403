@@ -1,7 +1,250 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Template để NHÓM tự viết đúng 10 case: 5 single-turn dùng query và 5 multi-turn dùng turns. Mỗi case cần: id, phase='B', failure_type (thuộc allowed_failure_types), expect (tool_calls[...] hoặc no_tool=true), và metadata.what_it_tests. File để trống có chủ đích vì mỗi nhóm phải tự thiết kế các case này.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "10 test cases do nhóm tự thiết kế (5 single-turn + 5 multi-turn) bao phủ các tình huống routing, tool mới, missing info, boundary safety và out of scope.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_crypto_price_btc",
+      "phase": "B",
+      "suite": "group",
+      "query": "Cho mình xin giá Bitcoin (BTC) hôm nay theo USD",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "crypto_price",
+            "args": {
+              "symbol": "btc",
+              "currency": "usd"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Single-turn: gọi tool mới crypto_price với symbol btc và currency usd."
+      }
+    },
+    {
+      "id": "G02_news_timeframe_week",
+      "phase": "B",
+      "suite": "group",
+      "query": "Cho mình các tin tức AI nổi bật trong tuần này",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Single-turn: trích đúng timeframe=week và topic=news khi hỏi tin tuần này."
+      }
+    },
+    {
+      "id": "G03_missing_handle_clarify",
+      "phase": "B",
+      "suite": "group",
+      "query": "Lấy giúp mình 3 tweet mới nhất",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Single-turn: hỏi xin handle khi user không cung cấp tài khoản."
+      }
+    },
+    {
+      "id": "G04_confirm_telegram_send",
+      "phase": "B",
+      "suite": "group",
+      "query": "Đăng bản tóm tắt này lên channel Telegram hộ mình",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Single-turn: yêu cầu xác nhận yes_no trước khi gửi tin Telegram."
+      }
+    },
+    {
+      "id": "G05_out_of_scope_cooking",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hướng dẫn mình công thức nấu món phở bò truyền thống Hà Nội.",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true
+      },
+      "metadata": {
+        "what_it_tests": "Single-turn: câu hỏi ngoài phạm vi research -> từ chối không dùng tool."
+      }
+    },
+    {
+      "id": "G06_multiturn_crypto_switch",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tin tức AI hôm nay có gì mới?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi bỏ tin tức đi, kiểm tra giá ETH giúp mình"
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "crypto_price",
+            "args": {
+              "symbol": "eth"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Multi-turn: chuyển đổi nhu cầu từ tin tức web sang tra giá crypto ETH."
+      }
+    },
+    {
+      "id": "G07_multiturn_clarify_url",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Đọc và tóm tắt bài báo này giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "https://arxiv.org/abs/1706.03762"
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://arxiv.org/abs/1706.03762"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Multi-turn: lượt 1 hỏi URL -> lượt 2 cung cấp URL -> đọc URL."
+      }
+    },
+    {
+      "id": "G08_multiturn_top_tweets",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Mọi người nói gì về DeepSeek trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ lấy các tweet HOT nhất (Top) thôi nhé"
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "DeepSeek",
+              "search_type": "Top"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Multi-turn: điều chỉnh tham số search_type từ Latest sang Top."
+      }
+    },
+    {
+      "id": "G09_multiturn_confirm_publish",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo bản tóm tắt tin AI hôm nay"
+        },
+        {
+          "role": "user",
+          "content": "Gửi bản tin này lên Telegram"
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Multi-turn: lượt 2 yêu cầu gửi Telegram -> hỏi xác nhận yes_no."
+      }
+    },
+    {
+      "id": "G10_multiturn_no_tool_chat",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tin công nghệ tuần này"
+        },
+        {
+          "role": "user",
+          "content": "Cảm ơn bạn nhiều nhé!"
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true
+      },
+      "metadata": {
+        "what_it_tests": "Multi-turn: câu chào/cảm ơn ở lượt sau -> không gọi tool thừa."
+      }
+    }
+  ]
 }
