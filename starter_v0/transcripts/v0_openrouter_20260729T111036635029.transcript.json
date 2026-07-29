@@ -1,0 +1,74 @@
+{
+  "transcript_id": "v0_openrouter_20260729T111036635029",
+  "version": "v0",
+  "artifact_version": "v0+pf0c107a9d7a1+tf2bb4e1b8042",
+  "prompt_hash": "f0c107a9d7a14032c948d642d7c36f2a85cb6d69a099530093a874c94d472446",
+  "tools_hash": "f2bb4e1b8042761f57c1f5c56411d65b0ef188ad583ab901dc5bc013e242e257",
+  "provider": "openrouter",
+  "created_at": "2026-07-29T11:11:06",
+  "turns": [
+    {
+      "role": "user",
+      "content": "Tin tức AI hôm nay có gì nổi bật?"
+    },
+    {
+      "role": "assistant",
+      "content": "Here are some notable AI news highlights from today:\n\n1. **Open vs. Closed: The Next Front in the AI Race**  \n   The White House is considering restricting Chinese open-weight models, which has made US officials uneasy. Moonshot AI recently released Kimi K3, an open-weight model that reportedly matches or outperforms advanced systems from US rivals. [Read more](https://www.gzeromedia.com/news/analysis/open-vs-closed-the-next-front-in-the-ai-race).\n\n2. **Employees at Major AI Companies Call for a Slowdown in Development**  \n   Following significant advancements in AI, employees from leading tech firms are advocating for a slowdown in AI development to allow society to prepare for the implications. OpenAI's CEO, Sam Altman, has suggested it may be time to slow down AI development. [Read more](https://www.cnn.com/2026/07/28/tech/ai-development-tech-employees-open-letter).\n\n3. **Tech Stocks Tumble Over AI Spending Concerns**  \n   Recent earnings reports from Tesla and Alphabet have raised concerns about the massive spending required to compete in the AI race, leading to market tremors. The release of Moonshot's latest AI model has added to investor worries about an AI arms race between China and the US. [Read more](https://www.nytimes.com/2026/07/28/business/stocks-ai-chips.html).\n\n4. **Public Opinion on the Global AI Race**  \n   A recent survey of U.S. adults reveals their views on the global AI race, reflecting concerns and expectations about the technology's impact. [Read more](https://ssrs.com/news/what-americans-think-about-the-global-ai-race).\n\n5. **The AI Premium**  \n   Research indicates that AI-themed firms outperform their counterparts, highlighting the economic and social transformations driven by AI. The study analyzes the performance of high-AI-beta firms around major AI news events. [Read more](https://cepr.org/voxeu/columns/ai-premium).\n\nThese articles provide a snapshot of the current landscape in AI, reflecting both advancements and concerns in the field.",
+      "tool_events": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI news",
+            "topic": "news",
+            "timeframe": "day",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI news",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Open vs. closed: The next front in the AI race",
+                "url": "https://www.gzeromedia.com/news/analysis/open-vs-closed-the-next-front-in-the-ai-race",
+                "source": "gzeromedia.com",
+                "summary": "That strategy is making US officials uneasy. The White House is reportedly considering restricting Chinese open-weight models by adding Chinese AI labs to its “Entity List,” effectively cutting off US access without a license. Last week, the Trump administration also accused Moonshot AI of “distilling” knowledge from American AI companies — a process in which developers use millions of interactions with existing models to train their own systems. Moonshot denied the allegations, and several AI [...] See Full Bio\n\n Make us preferred on Google\n\nOn Monday, Beijing-based Moonshot AI released Kimi K3 for public download, an “open-weight” model that made headlines last week for reportedly matching – and in some cases outperforming – the most advanced systems from US rivals at a fraction of the cost. [...] Kimi K3 is released by Moonshot AI at the World Artificial Intelligence Conference (WAIC) 2026 in Shanghai, China \n\nKimi K3, a new-generation AI model with 2.8 trillion parameters, is released by Moonshot AI at the World Artificial Intelligence Conference (WAIC) 2026 in Shanghai, China, July 20, 2026. It is currently the world's largest open-source model.\n\nOriental Image via Reuters Connect\n\nNatalie Johnson\n\nBy Natalie JohnsonJuly 28, 2026\n\nNatalie Johnson",
+                "score": 0.61779
+              },
+              {
+                "title": "Employees at the world’s biggest AI companies are calling for a slowdown in AI development | CNN Business",
+                "url": "https://www.cnn.com/2026/07/28/tech/ai-development-tech-employees-open-letter",
+                "source": "cnn.com",
+                "summary": "The letter comes on the heels of major advancements and burgeoning threats from rapidly developing AI systems. OpenAI disclosed last week that two of its test models escaped a lab environment, bypassed its systems to gain access to the open internet and hacked a different company’s internal system. [...] “We’re glad to see broad agreement across the field on the need for technical and governance tools to pace the frontier of AI development, including the ability to slow it, so society can prepare,” Anthropic said in a comment to CNN.\n\nGoogle DeepMind CEO Demis Hassabis also recently called for a new international standards body to help set protocols for new AI models, an idea endorsed by Altman, SpaceX’s Elon Musk, Microsoft CEO Satya Nadella and other major industry figures. [...] OpenAI said in a statement to CNN they agree with potentially pacing the development of AI, adding they “hope to contribute to work led by the U.S. government, alongside other labs” on the topic.\n\nOpenAI CEO Sam Altman suggested it may be time to slow down AI development in a podcast interview Tuesday. The OpenAI models that broke out of their test environment are fueling “long term questions” about how AI companies should address this new rate of progress.",
+                "score": 0.55623144
+              },
+              {
+                "title": "Tech Stocks Tumble on Worries About A.I. Spending and ...",
+                "url": "https://www.nytimes.com/2026/07/28/business/stocks-ai-chips.html",
+                "source": "nytimes.com",
+                "summary": "Last week, earnings reports by Tesla and Alphabet, Google’s parent company, shook the markets as they revealed the staggering scale of spending required to keep up in the global A.I. race. On Monday, the Chinese start-up Moonshot publicly released the details of its latest A.I. model, adding to investor concerns about an A.I. arms race between China and the United States. [...] The latest A.I.-related market tremor began on Monday, when the shares of China’s leading memory chipmaker, ChangXin Memory Technologies, began trading after a blockbuster initial public offering. The company’s stock soared nearly 500 percent on its market debut, quickly making it the most valuable company on the Shanghai exchange. It slipped 4 percent on Tuesday [...] The latest market turmoil is an unwelcome turn for a region where the A.I. boom has served as a rare economic bright spot. In markets like South Korea and Taiwan, rising chip exports and soaring A.I. valuations have masked broader weakness across their domestic economies, which remain heavily dependent on energy imports from the Middle East.",
+                "score": 0.48528314
+              },
+              {
+                "title": "What Americans think about the global AI race",
+                "url": "https://ssrs.com/news/what-americans-think-about-the-global-ai-race",
+                "source": "ssrs.com",
+                "summary": "We surveyed U.S. adults from June 22 to 28, 2026. Everyone who took these surveys is a member of the Center’s American Trends Panel. The surveys represent the views of the full U.S. adult population.\n\nHere are our survey questions, detailed responses and methodology.\n\nRead More\n\nAmerican Trends Panel Technology AI\n\nBack to News\n\nShare\n\n# Related News\n\nView All\n\n#### Majorities of Americans say key financial milestones are harder for today’s young adults to reach",
+                "score": 0.45754927
+              },
+              {
+                "title": "The AI premium",
+                "url": "https://cepr.org/voxeu/columns/ai-premium",
+                "source": "cepr.org",
+                "summary": "The AI premium survives controls for technology and semiconductor returns, AI-themed funds, industries, and public attention to AI. Around releases by frontier model providers, high-AI-beta firms outperform low-AI-beta firms by 1.9% over five trading days; the premium also remains positive when release weeks are removed (Figure 5). The signal is stronger around major AI news, but it is not confined to those events.\n\nFigure 5 Cumulative average returns around AI model releases [...] AI is the defining economic and social transformation of our time. Its consequences extend to productivity (Acemoglu et al. 2023), labour markets (Restrepo et al. 2021), inflation (Fornaro and Wolf 2026), and inequality (Hassan et al. 2026). Using 380 trillion tokens of realised AI consumption across more than 400 large language models from the licensed, proprietary OpenRouter dataset covering approximately 2% of current global monthly AI token consumption, in recent research we analyse how AI [...] Restrepo, P, D Autor, J Hazell and D Acemoglu (2021), “AI and jobs: Evidence from US vacancies”, VoxEU.org, 3 March.\n\nQA Engineer Working on Program Code \n\nVoxEU Column\n\n### New technologies, automation, and productivity across US firms\n\n Daron Acemoglu\n Gary Anderson\n David Beede\n Catherine Buffington\n Eric Childress\n Emin Dinlersoz\n Lucia Foster\n Nathan Goldschlag\n John Haltiwanger\n Zachary Kroff\n Pascual Restrepo\n Nikolas Zolas\n\n Productivity and Innovation",
+                "score": 0.42105237
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "updated_at": "2026-07-29T11:11:06"
+}

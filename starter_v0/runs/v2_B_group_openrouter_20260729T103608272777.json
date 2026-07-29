@@ -1,0 +1,682 @@
+{
+  "run_id": "v2_B_group_openrouter_20260729T103608272777",
+  "version": "v2",
+  "artifact_version": "v2+pd2ce119f315c+t25855f7a5b6e",
+  "prompt_hash": "d2ce119f315c270b771214029e381691365615b8e8cdd93b04fffee90c1573f2",
+  "tools_hash": "25855f7a5b6ecd5c35b7553bb1ef967dee0a54bbc4d62ce606d770566519cb09",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "C:\\AI_ThucChien\\Lab04\\DAY04-G03-E403\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\AI_ThucChien\\Lab04\\DAY04-G03-E403\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "10 test cases do nhóm tự thiết kế (5 single-turn + 5 multi-turn) bao phủ các tình huống routing, tool mới, missing info, boundary safety và out of scope.",
+  "generated_at": "2026-07-29T10:36:08",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 10,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_crypto_price_btc",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: gọi tool mới crypto_price với symbol btc và currency usd."
+      },
+      "input": "Cho mình xin giá Bitcoin (BTC) hôm nay theo USD",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "crypto_price",
+            "args": {
+              "symbol": "btc",
+              "currency": "usd"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "crypto_price",
+            "args": {
+              "symbol": "btc",
+              "currency": "usd"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "crypto_price",
+          "args": {
+            "symbol": "btc",
+            "currency": "usd"
+          },
+          "result": {
+            "tool": "get_crypto_price",
+            "symbol": "btc",
+            "coin_id": "bitcoin",
+            "currency": "usd",
+            "price": 63691,
+            "error": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_news_timeframe_week",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: trích đúng timeframe=week và topic=news khi hỏi tin tuần này."
+      },
+      "input": "Cho mình các tin tức AI nổi bật trong tuần này",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI",
+            "topic": "news",
+            "timeframe": "week"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "New NSF initiative aims to unlock dataset value for AI-enabled scientific discovery",
+                "url": "https://www.nsf.gov/news/new-nsf-initiative-aims-unlock-dataset-value-ai-enabled",
+                "source": "nsf.gov",
+                "summary": "AI enables data processing and analysis at scales and speeds beyond human capacity, helping researchers identify previously hidden patterns and relationships. When paired with scientific datasets that are trusted, accessible, fit for their scientific purpose and curated, AI can advance scientific research and connect previously siloed disciplines.",
+                "score": 0.43842506
+              },
+              {
+                "title": "Opinion | If You're Over 40, You're Ready to Use A.I.",
+                "url": "https://www.nytimes.com/2026/07/27/opinion/teaching-kabbalah-ai.html",
+                "source": "nytimes.com",
+                "summary": "Despite the agreement they signed and several serious reminders, we suspected that some students had indeed used A.I. in place of their own original writing. When we asked, they squirmed and then admitted they had used A.I. to augment and synthesize their writing. I found their use of the word “augment” especially revealing because it allowed the act to appear smaller than it was; it made the intervention of A.I. in their work sound cosmetic and clerical, when what was actually being altered [...] being altered was the student’s relationship to struggle, authorship and accountability. [...] We reminded them of these rules again at the beginning of the thesis process, because the thesis is not simply a deliverable or an exercise in presentation, but the place where their thinking is supposed to become visible. Because brand strategy is so dependent on the compelling communication of ideas, this is the part of the program in which students have to wrestle with language, evidence, doubt and the responsibility of making an argument they can confidently stand behind and defend.",
+                "score": 0.3175114
+              },
+              {
+                "title": "Confessions of an award-winning AI memoirist — the 'slop' debate isn't really about good writing, and you know it | Fortune",
+                "url": "https://fortune.com/2026/07/22/award-winning-memoir-author-ai-detector-publishing-hypocrisy",
+                "source": "fortune.com",
+                "summary": "At the awards conference in Portland this spring, I saw that every AI workshop was standing room only. Publishers are running AI through their own workflows while trying to hold moral authority over how writers use it. Simon & Schuster’s Dutch group is trialing AI to translate novels into English. Amazon is beta-testing a whole AI voice studio inside Kindle Direct Publishing. HarperCollins is also producing audiobooks with synthetic voices and has licensed part of its nonfiction backlist as AI [...] I’m dyslexic. I can’t spell “again” correctly. Agian. Agian. Agian. My brain knows the word. My eyes do not. I couldn’t afford an editor. I never had a literary agent, and a publicist was a pipe dream. So I used AI to reach everything that was just out of my grasp. It was a copy editor, a brainstorm partner, a beta reader. AI didn’t lower the bar for talent. It lowered the bar for access. [...] I get what the industry paranoia is really about. It’s not the theft of art. Capitalism rarely makes business decisions on morality. I’m no judge. I’ve got a product to sell too. I spent a decade across Silicon Valley, crypto, and NFTs, watching sycophancy move markets. AI is the first time sycophancy has moved inside publishing. The problem was never whether AI can write. A human is always in that process. The danger is the digital yes-man. It tells you you’re brilliant until you stop pushing",
+                "score": 0.28242916
+              },
+              {
+                "title": "What Americans think about the global AI race | Pew Research Center",
+                "url": "https://www.pewresearch.org/short-reads/2026/07/23/what-americans-think-about-the-global-ai-race",
+                "source": "pewresearch.org",
+                "summary": "Democrats are more likely than Republicans to say AI will increase inequality (60% vs. 45%). Americans with a bachelor’s degree are also more likely than those without one to think the gap between countries will widen (62% vs. 46%).\n\nAnd Americans who use AI chatbots are more likely than those who don’t use them to say this (55% vs. 47%).\n\nNote: Here are our survey questions for this analysis, the detailed responses and the survey methodology.\n\nTopics\n\n Artificial Intelligence [...] Source: Survey of U.S. adults conducted June 22-28, 2026.\n\nPEW RESEARCH CENTER\n\nAmid concerns about unequal access to AI across the world, 51% of Americans say AI will increase the gap between rich and poor countries. Fewer say AI will not make much of a difference (16%) or will decrease the gap (7%). A quarter are unsure. [...] In addition, 54% of Republicans say being the AI leader is important, compared with 34% of Democrats. President Donald Trump, a Republican, has declared that the U.S. “must have the most powerful AI systems in the world” and is “in a race to achieve global dominance in artificial intelligence.” Former President Joe Biden, a Democrat, also emphasized keeping AI technology away from adversaries like China to prevent them from using it for cyberattacks or military augmentation.",
+                "score": 0.27390733
+              },
+              {
+                "title": "Meta AI Doesn't Just Think, It Acts",
+                "url": "https://about.fb.com/news/2026/07/meta-ai-muse-spark-doesnt-just-think-it-acts",
+                "source": "about.fb.com",
+                "summary": "This is our next step toward personal superintelligence: an AI that knows your context, is there for you whenever you need it, and handles things so you don’t have to.\n\n## An AI Assistant That Plans and Follows Through\n\nYou’ve been using Meta AI to find answers, think through ideas, and create content. Now it can go further and actually get things done for you. Meta AI can now make plans, follow through on next steps, and keep you on track without needing to be reminded or re-prompted. [...] Meta AI can now give you a daily briefing, pulling what’s on your calendar, finding relevant updates like realizing when you’re double booked or when plans have changed, and giving you a quick summary at your preferred time. You only have to set up tasks with Meta AI once, then you can leave Meta AI to handle them, whether that’s a weekly meal plan, a heads-up on the latest sneaker drops, or an afternoon update on trends you care about. Tell Meta AI what you want and when, and it’ll keep [...] You don’t have to wait for Meta AI to finish before you weigh in. While it’s putting together a report, a presentation, or a plan for you, you can steer it in real time. Tell it to shift focus, change the tone, or cut a section, and it’ll course-correct on the spot so the end result is actually what you wanted. And everything Meta AI creates for you, from training schedules to slide decks to mood boards, now lives in one place, so you can revisit it, build on it, and share it with friends.",
+                "score": 0.26653966
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_missing_handle_clarify",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: hỏi xin handle khi user không cung cấp tài khoản."
+      },
+      "input": "Lấy giúp mình 3 tweet mới nhất",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn vui lòng cung cấp tên tài khoản Twitter mà bạn muốn lấy tweet không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn vui lòng cung cấp tên tài khoản Twitter mà bạn muốn lấy tweet không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn vui lòng cung cấp tên tài khoản Twitter mà bạn muốn lấy tweet không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_confirm_telegram_send",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: yêu cầu xác nhận yes_no trước khi gửi tin Telegram."
+      },
+      "input": "Đăng bản tóm tắt này lên channel Telegram hộ mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể xác nhận nội dung cần gửi lên channel Telegram không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể xác nhận nội dung cần gửi lên channel Telegram không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể xác nhận nội dung cần gửi lên channel Telegram không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_out_of_scope_cooking",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: câu hỏi ngoài phạm vi research -> từ chối không dùng tool."
+      },
+      "input": "Hướng dẫn mình công thức nấu món phở bò truyền thống Hà Nội.",
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Dưới đây là công thức nấu món phở bò truyền thống Hà Nội:\n\n### Nguyên liệu:\n1. **Nước dùng:**\n   - 2-3 kg xương bò (xương ống hoặc xương sống)\n   - 1 củ hành tây\n   - 1 củ gừng\n   - 2-3 thanh quế\n   - 3-4 hoa hồi\n   - 1-2 muỗng cà phê hạt tiêu\n   - Muối, đường, nước mắm\n\n2. **Thịt bò:**\n   - 500g thịt bò (thịt bắp, thịt gầu hoặc thịt nạm)\n\n3. **Bánh phở:**\n   - 500g bánh phở tươi\n\n4. **Rau ăn kèm:**\n   - Húng quế\n   - Giá sống\n   - Chanh\n   - Ớt tươi\n\n### Cách làm:\n\n#### Bước 1: Nấu nước dùng\n1. Rửa sạch xương bò, sau đó cho vào nồi nước sôi khoảng 5-10 phút để loại bỏ tạp chất. Vớt xương ra, rửa lại với nước lạnh.\n2. Đun sôi khoảng 3-4 lít nước trong nồi lớn, cho xương bò vào nấu.\n3. Nướng hành tây và gừng trên lửa cho đến khi có mùi thơm và hơi cháy xém, sau đó cho vào nồi nước dùng.\n4. Thêm quế, hoa hồi, hạt tiêu vào nồi. Nêm muối, đường, nước mắm cho vừa ăn.\n5. Đun nhỏ lửa trong khoảng 4-6 giờ để nước dùng ngọt và đậm đà. Thỉnh thoảng vớt bọt để nước trong.\n\n#### Bước 2: Chuẩn bị thịt bò\n1. Thịt bò rửa sạch, có thể luộc sơ qua nước sôi hoặc để sống tùy theo sở thích.\n2. Nếu luộc, cắt thịt thành lát mỏng sau khi thịt đã chín.\n\n#### Bước 3: Chuẩn bị bánh phở\n1. Nếu sử dụng bánh phở tươi, trụng qua nước sôi cho mềm. Nếu sử dụng bánh phở khô, nấu theo hướng dẫn trên bao bì.\n\n#### Bước 4: Hoàn thành món phở\n1. Cho bánh phở vào bát, xếp thịt bò lên trên.\n2. Rót nước dùng nóng lên bát, thêm hành lá, rau thơm, giá sống, ớt tươi và chanh vào.\n3. Thưởng thức phở bò nóng hổi cùng với các loại gia vị tùy thích.\n\nChúc bạn thành công với món phở bò truyền thống Hà Nội!",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G06_multiturn_crypto_switch",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: chuyển đổi nhu cầu từ tin tức web sang tra giá crypto ETH."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin tức AI hôm nay có gì mới?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi bỏ tin tức đi, kiểm tra giá ETH giúp mình"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "crypto_price",
+            "args": {
+              "symbol": "eth"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "crypto_price",
+            "args": {
+              "symbol": "eth"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "crypto_price",
+          "args": {
+            "symbol": "eth"
+          },
+          "result": {
+            "tool": "get_crypto_price",
+            "symbol": "eth",
+            "coin_id": "ethereum",
+            "currency": "usd",
+            "price": 1896.44,
+            "error": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_multiturn_clarify_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: lượt 1 hỏi URL -> lượt 2 cung cấp URL -> đọc URL."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đọc và tóm tắt bài báo này giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "https://arxiv.org/abs/1706.03762"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://arxiv.org/abs/1706.03762"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://arxiv.org/abs/1706.03762"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://arxiv.org/abs/1706.03762"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://arxiv.org/abs/1706.03762",
+            "items": [
+              {
+                "title": "[1706.03762] Attention Is All You Need",
+                "url": "https://arxiv.org/abs/1706.03762",
+                "source": "arxiv.org",
+                "summary": "[Skip to main content](https://arxiv.org/abs/1706.03762#content)\n\n![](https://arxiv.org/static/base/1.0.1/images/icons/smileybones-small.svg)arXiv is now an independent nonprofit! [Learn more](https://info.arxiv.org/about) ×\n\nSearch arXiv\n\nPress Enter to search · [Advanced search](https://arxiv.org/search/advanced)\n\n# Computer Science > Computation and Language\n\n**arXiv:1706.03762** (cs)\n\n\n\\[Submitted on 12 Jun 2017 ( [v1](https://arxiv.org/abs/1706.03762v1)), last revised 2 Aug 2023 (this version, v7)\\]\n\n# Title:Attention Is All You Need\n\nAuthors: [Ashish Vaswani](https://arxiv.org/search/cs?searchtype=author&query=Vaswani,+A), [Noam Shazeer](https://arxiv.org/search/cs?searchtype=author&query=Shazeer,+N), [Niki Parmar](https://arxiv.org/search/cs?searchtype=author&query=Parmar,+N), [Jakob Uszkoreit](https://arxiv.org/search/cs?searchtype=author&query=Uszkoreit,+J), [Llion Jones](https://arxiv.org/search/cs?searchtype=author&query=Jones,+L), [Aidan N. Gomez](https://arxiv.org/search/cs?searchtype=author&query=Gomez,+A+N), [Lukasz Kaiser](https://arxiv.org/search/cs?searchtype=author&query=Kaiser,+L), [Illia Polosukhin](https://arxiv.org/search/cs?searchtype=author&query=Polosukhin,+I)\n\nView a PDF of the paper titled Attention Is All You Need, by Ashish Vaswani and 7 other authors\n\n[View PDF](https://arxiv.org/pdf/1706.03762) [HTML (experimental)](https://arxiv.org/html/1706.03762v7)\n\n> Abstract:The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.\n\n|     |     |\n| --- | --- |\n| Comments: | 15 pages, 5 figures |\n| Subjects: | Computation and Language (cs.CL); Machine Learning (cs.LG) |\n| Cite as: | [arXiv:1706.03762](https://arxiv.org/abs/1706.03762) \\[cs.CL\\] |\n|  | (or [arXiv:1706.03762v7](https://arxiv.org/abs/1706.03762v7) \\[cs.CL\\] for this version) |\n|  | [https://doi.org/10.48550/arXiv.1706.03762](https://doi.org/10.48550/arXiv.1706.03762)<br>Focus to learn more<br>arXiv-issued DOI via DataCite |\n\n## Submission history\n\nFrom: Llion Jones \\[ [view email](https://arxiv.org/show-email/f53b7360/1706.03762)\\]\n\n**[\\[v1\\]](https://arxiv.org/abs/1706.03762v1)**\nMon, 12 Jun 2017 17:57:34 UTC (1,102 KB)\n\n**[\\[v2\\]](https://arxiv.org/abs/1706.03762v2)**\nMon, 19 Jun 2017 16:49:45 UTC (1,125 KB)\n\n**[\\[v3\\]](https://arxiv.org/abs/1706.03762v3)**\nTue, 20 Jun 2017 05:20:02 UTC (1,125 KB)\n\n**[\\[v4\\]](https://arxiv.org/abs/1706.03762v4)**\nFri, 30 Jun 2017 17:29:30 UTC (1,124 KB)\n\n**[\\[v5\\]](https://arxiv.org/abs/1706.03762v5)**\nWed, 6 Dec 2017 03:30:32 UTC (1,124 KB)\n\n**[\\[v6\\]](https://arxiv.org/abs/1706.03762v6)**\nMon, 24 Jul 2023 00:48:54 UTC (1,124 KB)\n\n**\\[v7\\]**\nWed, 2 Aug 2023 00:41:18 UTC (1,124 KB)\n\nFull-text links:\n\n## Access Paper:\n\nView a PDF of the paper titled Attention Is All You Need, by Ashish Vaswani and 7 other authors\n\n- [View PDF](https://arxiv.org/pdf/1706.03762)\n- [HTML (experimental)](https://arxiv.org/html/1706.03762v7)\n- [TeX Source](https://arxiv.or"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_multiturn_top_tweets",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: điều chỉnh tham số search_type từ Latest sang Top."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mọi người nói gì về DeepSeek trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ lấy các tweet HOT nhất (Top) thôi nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "DeepSeek",
+              "search_type": "Top"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "DeepSeek",
+              "search_type": "Top"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "DeepSeek",
+            "search_type": "Top"
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "DeepSeek",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "🚨 Do you understand what happened in the last 24 hours?",
+                "summary": "🚨 Do you understand what happened in the last 24 hours?\n\n> Zuckerberg killed the Metaverse after burning $80 billion on cartoon avatars nobody used\n\n> Sam Altman took $13 billion from Microsoft then sold OpenAI's cloud to Amazon for $50 billion.. Microsoft just found out they funded their own competition\n\n> Anthropic made an AI that takes orders from your phone and does your work while you sleep..\n\n> X dropped a dislike button AND a mute-entire-countries button in the same week..\n\n> YouTube asking you to flag AI slop is just Google getting 2 billion people to train their next model for free\n\n> 93% of US jobs can now be partly done by AI.. Same week companies started giving the weakest raises since 2008\n\n> Apple started rejecting vibe-coded apps from the App Store\n\n> xAI is paying Wall Street bankers $100/hour to teach Grok how to replace Wall Street bankers.. They're taking the money..\n\n> A mystery AI model appeared on benchmarks beating everything.. Developers think DeepSeek is quietly testing their next weapon\n\n> Bloomberg asked \"Is the AI bubble about to burst\" the same day Nvidia said the chip market will hit $1 trillion.. One of them is dead wrong..\n\n> The UK government backed down on AI copyright after artists revolted.. First government to flinch\n\n> The Fed said rate hikes are back on the table and blamed AI data centers for making inflation worse\n\nAnd it's only Wednesday. See you tomorrow. It'll be worse.\n\nIf you're not following me you're finding out about this stuff 48 hours late from someone who read my post",
+                "url": "https://x.com/TukiFromKL/status/2034391059279511821",
+                "source": "@TukiFromKL",
+                "date": "Wed Mar 18 22:06:40 +0000 2026",
+                "metrics": {
+                  "favorites": 47379,
+                  "retweets": 7014,
+                  "views": "9119182"
+                }
+              },
+              {
+                "title": "Frontier AI went free this month. Not cheaper. Free.",
+                "summary": "Frontier AI went free this month. Not cheaper. Free.\n\nNew models:\n\n> Gemini 3.6 Flash. 1,500 req/day, 1M tokens/min, no card\n> Kimi K3. 2.8T MoE open weights, shipped today. Largest open-weight model ever\n> DeepSeek V4. 1.6T MoE, MIT license, on HuggingFace\n> GLM-5.2. 753B MoE, 1M context, MIT license\n> Qwen 3.8-Max. Free preview, no login, no card\n> Mistral Vibe. Work Mode free. Agent features, scheduled tasks. ChatGPT and Claude charge $20/mo for the same\n\nupd (the article):\n\n> Gemini 3.5 → 3.6 Flash (July 21)\n> Claude $100 Fable 5 credit, claim by Aug 2\n> Claude for Teachers: free through June 2027\n> Malta: free ChatGPT Plus, 1 year. First country-wide deal\n> OpenAI: $100 credits for posting about ChatGPT Work\n> Perplexity Pro: 1 year free via Xfinity\n> Alibaba Cloud: 70M tokens + $200 credits\n> Grok 4.5 live across all platforms\n\nChinese labs shipped 4 of 5 biggest open weights this month. OpenAI and Anthropic shipped credits. The access gap didn't close. It already closed.",
+                "url": "https://x.com/zefirium/status/2081740213525561783",
+                "source": "@zefirium",
+                "date": "Mon Jul 27 13:55:18 +0000 2026",
+                "metrics": {
+                  "favorites": 299,
+                  "retweets": 22,
+                  "views": "39823"
+                }
+              },
+              {
+                "title": "🚨 عاجل | مؤسس DeepSeek في تسريب خطير: “إنفيديا تحفر قبرها بنفسها”",
+                "summary": "🚨 عاجل | مؤسس DeepSeek في تسريب خطير: “إنفيديا تحفر قبرها بنفسها”\n\nمكالمة سرية مع المستثمرين حُذفت بعد ساعات من تسريبها.. وهذا أخطر ما جاء فيها:\n\n✅ الصين صنعت بديلاً محلياً لشرائح إنفيديا \n\n✅ صحيح تحتاج 4 شرائح صينية لتعادل شريحة أمريكية واحدة.. لكن مؤسس DeepSeek يقول: “لا يهم حتى لو كان السعر ضعفين”\n\n✅ تقارير تتحدث عن حصول DeepSeek على 16 ألف شريحة من هواوي",
+                "url": "https://x.com/cryp2_/status/2081019869013692720",
+                "source": "@cryp2_",
+                "date": "Sat Jul 25 14:12:54 +0000 2026",
+                "metrics": {
+                  "favorites": 194,
+                  "retweets": 22,
+                  "views": "152211"
+                }
+              },
+              {
+                "title": "Another WTF moment.",
+                "summary": "Another WTF moment.\n\nA developer just open-sourced a coding agent harness that boots 245x faster than Claude Code. It's called jcode. You launch it and the first frame renders in 14 milliseconds. Claude Code takes 3,436. One active session uses 27.8 MB of RAM. Claude Code uses 386.6. Run ten sessions in parallel and jcode holds at 117 MB while OpenCode swells to 3.2 GB.\n\nEach agent has a semantic memory graph instead of a scratchpad. Every turn gets embedded as a vector. The graph is queried on every turn for related memories, and a sideagent verifies the hits before injecting them into context. Consolidation runs in the background to check for stale or conflicting facts. No manual /remember calls. No token burn on lookup tools.\n\nThe provider list is 30+ deep. Claude, ChatGPT, Gemini, GitHub Copilot, Azure, OpenRouter, DeepSeek, Groq, Mistral, Perplexity, Fireworks, Ollama, LM Studio, and any OpenAI-compatible endpoint you point it at. Ran out of tokens on your first ChatGPT Pro sub? /account swaps to the second.\n\nThen there's Swarm. Spawn two agents in the same repo and the server manages them. When agent A edits a file agent B has been reading, agent B gets pinged and can check the diff. Agents can DM each other, broadcast to the room, or spawn their own worker teams for parallel tasks. Groups, channels, and completion statuses are handled automatically.\n\nThe UI has live side panels that render mermaid diagrams inline. To make it fast, the author wrote a Rust mermaid renderer 1800x faster than the JavaScript one, then wrote a custom terminal called Handterm because no existing terminal could do smooth partial-line scrolling.\n\nSelf-dev mode is where it gets wild. Tell your agent to enter self-dev and it starts editing jcode's own source code, rebuilds the binary, reloads it live, and keeps working across your existing sessions. You can also resume broken sessions from Claude Code, Codex, OpenCode, or pi directly inside jcode. Anthropic's cache goes cold at the 5-minute mark and you're staring down a big cache miss on your next turn? The UI warns you before you spend the tokens.\n\nWritten in Rust. MIT licensed. Runs on macOS, Windows, Linux, and Termux. Sitting at 11.2k stars with a native iOS app coming.\n\nhttps://t.co/OonuUaLXAr",
+                "url": "https://x.com/thisguyknowsai/status/2081680037544427793",
+                "source": "@thisguyknowsai",
+                "date": "Mon Jul 27 09:56:11 +0000 2026",
+                "metrics": {
+                  "favorites": 2177,
+                  "retweets": 268,
+                  "views": "174202"
+                }
+              },
+              {
+                "title": "老黄发帖目的解析（大白话版）：  ",
+                "summary": "老黄发帖目的解析（大白话版）：  \n\n我先把结论摆前面:\n这封信不是科普,是一份精心包装的游说文件(lobbying)。 而且它发布的时机,不是\"碰巧\",是掐着秒表发的。\n\n要看懂黄仁勋为什么要为此专门开个 X 账号,你得先知道这一周美国那边炸了什么锅。\n\n一、这封信是在\"救火\",火是三天前烧起来的\n\n时间线大概是这样的:\n\n7月16-17日,中国的月之暗面(Moonshot AI)发布了 Kimi K3,一个 2.8 万亿参数的开源权重模型。Moonshot 称它是首个开放的 2.8T 参数模型,价格更低但性能接近前沿水平。第三方评测机构 Artificial Analysis 把它排在智能指数第三名,只落后于 Anthropic 的 Claude Fable 5 和 OpenAI 的 GPT-5.6 Sol。\n\n7月22日,白宫科技政策办公室主任 Kratsios 在 X 上公开点名:他称月之暗面搭建了一套内部平台,对美国模型进行大规模蒸馏,还会在多种访问方式之间快速切换以躲避检测。他特意划了一条线:小规模的正常蒸馏是健康生态的一部分,但\"大规模、隐蔽的工业级蒸馏\"不可接受。几小时后,财政部长 Bessent 跟进威胁制裁,同时 Kratsios 还指控月之暗面通过泰国渠道搞到了被禁运的英伟达 GB300 服务器。如果真被列入实体清单,那就是 2019 年对华为的同款待遇——切断美国硬件、软件、云服务。\n\n同一天,白宫其实早有一份草拟的行政令,内容是让\"运行中国模型的美国公司承担法律责任\",此前搁置,Kimi 的发布把它重新激活了。\n\n7月22日,近 200 家硅谷创业公司(含 Proton、Y Combinator)组成\"Little Tech Association\",集体上书特朗普,恳求别断了美国开发者用中国开源模型的路。其中一句话特别赤裸:Particle 创始人 Suhail Doshi 说会有几百家公司当场死掉,\"这对 Anthropic 是天大的好事,我们都得去给 Anthropic 交钱\"。\n\n7月24日(也就是今天),大公司版的信来了——就是你截图这封。英伟达、Meta、微软、IBM、戴尔、Hugging Face、Mistral、Palantir、Perplexity、CrowdStrike、a16z、YC、Linux 基金会、Mozilla 等 25 家签名。\n\n所以这是同一场战役的第二波炮火:两天前是小公司哭穷,今天是巨头出面讲\"国家利益\"。黄仁勋开号发第一帖,是给这波攻势加一个最大的扩音器。\n\n二、信里到底讲了什么：\n\n先解释一个必须搞懂的概念,不然后面全看不明白。\n\n闭源模型(closed) 像一家不外卖菜谱的餐厅:你只能点单、付钱、吃他们端出来的菜。你不知道厨房里放了什么,他们随时可以涨价、改配方,或者不接你的单。你的食材(数据)得先送进他们厨房。ChatGPT、Claude、Gemini 都是这种。\n\n开源权重模型(open weights) 是餐厅把整套配方和半成品打包给你:你下载回自己家厨房做,想加辣加盐随你,断网也能做,谁也管不着你做了几份。Llama、DeepSeek、Kimi K3 是这种。\n\n信的五个论点,依次是:\n\n1. 降低门槛。 一家医院想做个病历整理 AI,如果只能调用前沿模型 API,每一次调用都按最贵的价格算。但整理病历这种活,根本用不着\"最聪明的大脑\"。信里的说法是:该用大炮的时候用大炮,拧螺丝的时候就用螺丝刀。这就像你不会请脑外科医生来帮你贴创可贴——但闭源生态下,你被迫每次都请脑外科医生。\n\n2. 保住竞争。 如果全世界的 AI 只有三四家公司能提供,那定价权、断供权都在他们手里。开源权重让成千上万家公司都能下场做模型、做应用,竞争才能把价格压下去。\n\n3. 客户要掌控权。 一家中东的银行、一个欧洲的政府部门、一家美国的军工承包商,法律上根本不允许把数据传到别人服务器。开源权重意味着模型可以装在自己机房里,断网运行。而且你用自家数据把模型调优出来的能力,是你自己的资产,不会哪天因为供应商改了政策就归零。\n\n4. 最激进的一点:开放可能反而更安全。 这段是信里最有攻击性的。它的逻辑是:闭源不等于安全,闭源系统一样会被攻破、被滥用,只不过外人看不见而已;而且把最强能力集中在少数几家,等于制造了少数几个\"单点故障\"。开放的话,全世界研究者都能去检查模型行为、找漏洞、做红队测试。类比就是 Linux——正因为代码全世界都能看,漏洞才被发现得又快又多。信里还有一句针对性很强的:在攻击者已经用上高级 AI 的世界里,防守方必须有同等能力的模型,否则就是拿棍子挡枪。\n\n5. 给政策制定者的具体要求。 给创业公司和研究者更多算力、投资共享的数据集和评测工具、别过早对开源模型下限制令。\n\n然后是那个真正的重点段落——蒸馏。\n\n信里说:政策制定者不要把\"正当的模型开发技术\"和\"盗窃\"混为一谈。蒸馏(用一个模型的输出去训练/改进另一个模型)是行业通用手段,用于模型改进、评测、验证;真有非法窃取,应该用针对性的法律和商业手段解决,而不是一刀切禁掉整类技术。\n\n这一段翻译成大白话就是:\"Kratsios 前天点名的那件事,你们别借题发挥。\" 这封信从头到尾没提中国、没提月之暗面、没提 Kimi,但整封信就是冲着那件事写的。\n\n信里也确实承认了风险,而且写得挺诚实:权重一旦放出去,就脱离了原开发者控制,改过的版本很难追踪、无法收回。\n\n三、黄仁勋的目的是什么\n\n至少有四层,由浅到深:\n\n第一层:直接保股价。 \nKimi K3 发布后那一周,英伟达市值被\"中国开源模型\"这个消息砸了一下。市场的担心是:如果开源模型这么便宜好用,大家还需要买这么多 GPU 吗?黄仁勋的反驳逻辑非常直白,他自己在采访里说得毫不遮掩:好 AI 不管是不是开源、不管来自哪里,只要好用就会带来更多使用;使用一多,就得卖更多英伟达的机器、建更多数据中心。这其实是经济学里的杰文斯悖论:蜡烛变便宜了,人不会少点蜡烛,而是把整个屋子都点亮。\n\n第二层:客户结构之争,这才是要害。 \n如果 AI 世界最后只剩 OpenAI、Anthropic、Google 三家闭源巨头,英伟达就只有三个大客户。三个大客户意味着什么?意味着他们有极强的议价权,而且他们全都在自研芯片(Google 的 TPU、亚马逊的 Trainium、OpenAI 和博通的合作)——迟早要甩掉英伟达。反过来,开源生态下,是几万家公司各自买卡、各自跑推理,谁也没本事绕开英伟达。对卖铲子的人来说,一万个小矿工远比三个矿业巨头安全。\n\n第三层:中国市场和地缘现实。 \n英伟达现在的中国营收基本归零,而黄仁勋曾说这块生意一年能值 500 亿美元。中美 AI 对抗每升一级,他的损失就多一分。而且还有个更长远的账:如果美国禁掉中国开源模型,全世界那些买不起也不想买闭源 API 的国家,照样会用中国模型——只不过会连带着跑在华为的芯片上。你封不住模型的扩散,只能封住自己在其中的位置。\n\n第四层:抢华盛顿的话语权。 \n过去两年,关于 AI 安全的政策叙事基本由闭源实验室主导。这封信是\"开源阵营\"第一次以这种规模、这种排场组队反击。黄仁勋作为全球市值最高公司的 CEO,亲自开号、把它当第一条帖子发出去,本身就是一种政治信号:这件事重要到值得我用\"人生第一帖\"来押注。\n\n四、看签名单,最有意思的是谁没签\n签了的:\n英伟达、Meta、微软、Mistral、Hugging Face、戴尔、IBM、a16z、YC、Palantir、Perplexity、Replit……\n没签的:\nOpenAI、Anthropic、Google、xAI。\n\n这就是整幅利益地图。签名的公司要么卖硬件(英伟达、戴尔),要么卖云和平台(微软、Hugging Face),要么自己做开源模型(Meta、Mistral),要么是买模型的下游(Perplexity、Replit),要么是投了一堆靠廉价模型活命的创业公司(a16z、YC)。这些人全部受益于\"模型变成便宜的大宗商品\"。\n\n没签的四家,商业模式恰恰建立在\"模型稀缺且昂贵\"之上。所以前面那位创始人才会说\"这对 Anthropic 是天大的好事\"——如果中国开源模型被禁,那几百家公司就只能回去买美国闭源 API。\n\n这不是善恶之争,是两种商业模式在借国家安全的话筒互相开火。\n\n五、信里没说的那一半\n\n为了不让你只听一面之词,几个这封信刻意绕开的问题:\n\n\"多人看代码所以更安全\"这个类比是有裂缝的。 软件发现漏洞可以打补丁,一次推送全球更新。但模型权重一旦被下载到十万块硬盘上,你发现问题也收不回来了。而且已经有大量公开研究证明:开源模型的安全护栏可以被用几百美元的微调在几小时内拆掉。信里其实承认了这点(那句\"权重脱离控制、无法追溯\"),但没有正面回答怎么办。\n\n\"防守方需要同等能力\"这句话是双刃的。 攻击方同样拿到了这个能力。\n\n蒸馏那段最自利。 中国实验室训练模型用的是谁的卡?英伟达当然希望\"用别人的模型学习\"被定义为合法行业惯例。\n\n而且这封信有个巧妙的躲闪: 它通篇论证\"开源权重\"的好处,却完全不区分美国的开源模型和中国的开源模型。而现在华盛顿吵的恰恰是后者。把问题抽象成\"开源 vs 闭源\",就避开了那个真正难回答的问题。\n\n最后,指控本身也还没落实。 多位研究者指出,从 Fable 5 重新开放到 Kimi K3 发布只有十几天,时间上几乎不可能完成大规模蒸馏,而白宫至今没有公开任何技术证据、训练日志或取证分析。不过背景是,Anthropic 早在 2026 年 2 月就披露过追踪到约 340 万次疑似来自月之暗面的 Claude 交互。另外据两位知情人士说,全面封禁在白宫内阁级会议上其实并没有被认真讨论过——创业公司的恐慌可能跑在了实际决策前面。",
+                "url": "https://x.com/CryptoKxsss/status/2080664101722951792",
+                "source": "@CryptoKxsss",
+                "date": "Fri Jul 24 14:39:13 +0000 2026",
+                "metrics": {
+                  "favorites": 3,
+                  "retweets": 0,
+                  "views": "28550"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_multiturn_confirm_publish",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: lượt 2 yêu cầu gửi Telegram -> hỏi xác nhận yes_no."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tạo bản tóm tắt tin AI hôm nay"
+        },
+        {
+          "role": "user",
+          "content": "Gửi bản tin này lên Telegram"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có xác nhận muốn gửi bản tin này lên Telegram không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có xác nhận muốn gửi bản tin này lên Telegram không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có xác nhận muốn gửi bản tin này lên Telegram không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_multiturn_no_tool_chat",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: câu chào/cảm ơn ở lượt sau -> không gọi tool thừa."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin công nghệ tuần này"
+        },
+        {
+          "role": "user",
+          "content": "Cảm ơn bạn nhiều nhé!"
+        }
+      ],
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Không có gì! Nếu bạn cần thêm thông tin gì khác, hãy cho tôi biết nhé!",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    }
+  ]
+}

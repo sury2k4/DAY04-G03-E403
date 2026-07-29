@@ -1,5 +1,4 @@
 tools:
-  # ---------------- Core tools ----------------
   - name: clarify
     description: "Hỏi lại người dùng khi thiếu thông tin bắt buộc (như handle tài khoản, URL) hoặc khi cần xác nhận trước hành động gửi tin nhắn."
     parameters:
@@ -69,7 +68,6 @@ tools:
         headline: {type: string, default: "", description: "Tiêu đề bản tin"}
       required: [items, template]
 
-  # ---------------- Custom team tool ----------------
   - name: crypto_price
     description: "Tra cứu giá tiền điện tử (Cryptocurrency) theo thời gian thực (BTC, ETH, SOL,...)."
     parameters:
@@ -79,7 +77,6 @@ tools:
         currency: {type: string, default: "usd", description: "Đơn vị tiền tệ (ví dụ: usd, eur, vnd)"}
       required: [symbol]
 
-  # ---------------- Bonus / Optional tools ----------------
   - name: send
     description: "Gửi thông điệp/bản tin lên Telegram channel. Chỉ thực hiện khi người dùng đã xác nhận."
     parameters:
@@ -96,7 +93,7 @@ tools:
       properties:
         query: {type: string, default: "", description: "Truy vấn tìm kiếm"}
         policy_area: {type: string, enum: [all, ai_research, source_citation, data_privacy, external_publishing, tool_usage], default: "all", description: "Nhóm quy định"}
-        top_k: {type: integer, default: 3, description: "Số kết quả"}
+        top_k: {type: integer, default: 3, description: "Số mục"}
       required: [query]
 
   - name: papers
