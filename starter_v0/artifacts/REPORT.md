@@ -1,121 +1,71 @@
-# Day 04 Lab v2 Report — Research Agent
+# Báo cáo eval Research Agent
 
-> File này gồm 2 phần, deadline khác nhau:
-> - **PHẦN A — Giới thiệu agent**: ngắn gọn 1 trang để team khác hiểu nhanh agent có tool gì, làm được gì, thử bằng câu hỏi nào. Xong trước 11:30 để làm tài liệu phụ trợ khi demo.
-> - **PHẦN B — Chi tiết / Bằng chứng**: bảng đầy đủ (v0–v3, failure, eval, chat) dựa trên log thật. Có thể hoàn thiện sau buổi debate để nộp bài.
+## Tóm tắt
 
-## Team
+Provider/model: OpenRouter / `openai/gpt-4o-mini`.
 
-- Team:
-- Members:
-- Provider/model:
+Chuỗi thí nghiệm dùng API thật và cùng bộ `data/eval_base.json`:
 
----
+| Version | Thay đổi chính | Pass | Accuracy | Provider errors |
+|---|---|---:|---:|---:|
+| v0 | Baseline starter | 14/20 | 70% | 0 |
+| v1 | Scope và routing theo intent | 16/20 | 80% | 0 |
+| v2 | Missing info, arguments và multi-turn | 19/20 | 95% | 0 |
+| v3 | Confirmation và multi-tool | 20/20 | 100% | 0 |
 
-# PHẦN A — Giới thiệu agent
+Mỗi version có hypothesis, artifact hash, metric trước–sau và run file riêng trong
+`artifacts/version_log.csv`. `data/eval_base.json` không bị sửa.
 
-## A1. Agent này làm được gì
+## Diễn tiến thí nghiệm
 
-> 1–2 câu mô tả agent dùng để làm gì.
+### v0 — Baseline
 
-Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc URL và tổng hợp thành digest."
+Baseline đạt 14/20. Sáu lỗi gồm hai lỗi ngoài phạm vi, hai lỗi thiếu thông tin,
+một lỗi confirmation và một lỗi routing/argument.
 
-**Link dùng thử (truy cập được trong showdown):**
+### v1 — Scope và routing
 
-> Dán public URL nếu người khác cần mở từ máy riêng; localhost cũng được nếu demo trực tiếp trên máy trình chiếu. Streamlit được khuyến nghị, nhưng nhóm có thể dùng bất kỳ framework nào.
->
-> URL:
+Hypothesis: scope và mapping intent-to-tool rõ ràng sẽ giảm lỗi dùng tool không
+cần thiết và chọn sai tool.
 
-## A2. Tool agent có
+Kết quả tăng từ 70% lên 80% (16/20). Các lỗi ngoài phạm vi và routing chính được
+loại bỏ. Bốn lỗi còn lại thuộc missing info, confirmation và carry-over argument.
 
-> Liệt kê các tool agent đang dùng. Mỗi tool 1 dòng: tên + làm được gì.
+Run: `runs/v1_B_base_openrouter_20260729T105019466534.json`.
 
-| Tên tool | Làm được gì | Tool mới nhóm thêm? |
-|---|---|---|
-| clarify | hỏi lại người dùng khi thiếu thông tin | không |
-|  |  |  |
-|  |  |  |
+### v2 — Missing info, arguments và multi-turn
 
-## A3. Câu hỏi mẫu để thử
+Hypothesis: cấm đoán handle/URL, giữ nguyên argument người dùng và ưu tiên correction
+mới nhất sẽ loại lỗi missing-info và argument.
 
-> 3–5 câu hỏi/yêu cầu mẫu để team khác tự thử agent ngay.
+Kết quả tăng từ 80% lên 95% (19/20). Multi-turn đạt 100%; chỉ còn case xác nhận
+trước khi gửi ra ngoài.
 
-1.
-2.
-3.
+Run: `runs/v2_B_base_openrouter_20260729T105230994340.json`.
 
-## A4. Kịch bản demo đã rehearse
+### v3 — Confirmation và multi-tool
 
-> Chuẩn bị 3–5 scenario. Mỗi scenario cần cho thấy tool đã làm gì và một thay đổi cụ thể giữa các version.
+Hypothesis: boundary rõ cho write action và yêu cầu thực hiện đủ các tool độc lập
+sẽ loại lỗi cuối cùng mà không gây regression.
 
-| Scenario | Tool trace cần thấy | Câu chuyện cải thiện version | Fallback run/transcript |
-|---|---|---|---|
-|  |  |  |  |
+Kết quả tăng từ 95% lên 100% (20/20). Routing, argument và multi-turn đều đạt 100%.
 
----
+Run: `runs/v3_B_base_openrouter_20260729T105452816686.json`.
 
-# PHẦN B — Chi tiết / Bằng chứng
+## Team-authored và extension
 
-> Điều kiện metric hợp lệ: `provider_error_cases` phải bằng `0`; `measured_cases` phải bằng `total_cases`; và bất kỳ `tool_results` nào có error đều phải được review thủ công vì routing PASS không chứng minh tool execution đã đúng.
+Artifact v3 cuối cùng là `v3+pbda7da669697+taf30e6630f44`.
 
-## B1. Version evidence
+| Bộ eval | Version | Pass | Accuracy | Provider errors | Run |
+|---|---:|---:|---:|---:|---|
+| Group (5 single-turn + 5 multi-turn) | v3 | 10/10 | 100% | 0 | `runs/v3_B_group_openrouter_20260729T105604629707.json` |
+| Extension | v3 | 10/10 | 100% | 0 | `runs/v3_B_extension_openrouter_20260729T105710543908.json` |
 
-Fill from `artifacts/version_log.csv` and `runs/*.json`.
+Group và extension dùng đúng cùng prompt hash và tools hash với run base của v3.
+Chúng là các suite kiểm tra thêm, không được ghi thành version giả.
 
-| Version | Prompt/tool change | Hypothesis | Metric name | Before | After | Run File |
-|---|---|---|---|---:|---:|---|
-| v0 | baseline |  |  |  |  |  |
-| v1 |  |  |  |  |  |  |
-| v2 |  |  |  |  |  |  |
-| v3 |  |  |  |  |  |  |
+## Kết luận
 
-## B2. Failure analysis
-
-Use actual failures from `results[*].result.failures`.
-
-| Case ID | Failure Type | Actual Tool Calls | What Failed | Fix |
-|---|---|---|---|---|
-|  |  |  |  |  |
-
-## B3. Team eval cases
-
-List the 10 cases added to `data/eval_group.json`:
-
-- 5 single-turn
-- 5 multi-turn
-
-This section is for the mandatory team-authored eval set. Optional built-ins do
-not belong here.
-
-File template để trống có chủ đích; nhóm phải tự thiết kế đủ 10 case.
-
-| Case ID | What It Tests | Expected Tool/Behavior | Result |
-|---|---|---|---|
-|  |  |  |  |
-
-## B4. Live chat evidence
-
-Use `transcripts/*.transcript.json`.
-
-| Scenario/Turn | Version | Tool Calls + Args | Transcript/Run | Outcome |
-|---|---|---|---|---|
-|  |  |  |  |  |
-
-## B5. Tool capability evidence
-
-Phân loại rõ tool mới bắt buộc, optional built-in và tool đủ điều kiện bonus. Chỉ ghi Telegram/PDF nếu nhóm thực sự dùng; base report không cần chúng.
-
-UI is core deliverable, not bonus. Do not list it here.
-
-| Category | Evidence File | What Worked | Risk / Guardrail |
-|---|---|---|---|
-| Must-have: tool mới đầu tiên |  |  |  |
-| Optional built-in |  |  |  |
-| Bonus: tool mới thứ 4 trở đi |  |  |  |
-
-## B6. Reflection
-
-- Which fixes belonged in `system_prompt.md`?
-- Which fixes belonged in `tools.yaml`?
-- Which failure needed manual review instead of automatic grading?
-- What would you improve next?
+Chuỗi `v0 → v1 → v2 → v3` là bốn trạng thái artifact khác nhau và ba thí nghiệm
+tăng dần thật. Accuracy base tăng `70% → 80% → 95% → 100%`. Bản v3 cũng đạt
+100% trên group và extension, không có provider error.

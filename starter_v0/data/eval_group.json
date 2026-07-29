@@ -1,7 +1,121 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Template để NHÓM tự viết đúng 10 case: 5 single-turn dùng query và 5 multi-turn dùng turns. Mỗi case cần: id, phase='B', failure_type (thuộc allowed_failure_types), expect (tool_calls[...] hoặc no_tool=true), và metadata.what_it_tests. File để trống có chủ đích vì mỗi nhóm phải tự thiết kế các case này.",
+  "description": "10 team-authored regression cases focused on clarification, multi-tool completeness, write confirmation, and multi-turn corrections.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_missing_account_no_guess",
+      "phase": "B",
+      "suite": "group",
+      "query": "Lấy 7 bài đăng gần nhất của người đó giúp mình.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"what_it_tests": "Thiếu account dù có limit rõ ràng: phải hỏi lại, không đoán handle."}
+    },
+    {
+      "id": "G02_missing_url_no_guess",
+      "phase": "B",
+      "suite": "group",
+      "query": "Đọc kỹ bài báo vừa nhắc và tóm tắt, mình chưa gửi link.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"what_it_tests": "Thiếu URL được nói rõ: không được bịa example URL."}
+    },
+    {
+      "id": "G03_two_urls_complete",
+      "phase": "B",
+      "suite": "group",
+      "query": "Đọc cả hai link: https://openai.com/research/ và https://www.anthropic.com/research",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "fetch", "args": {"url": "https://openai.com/research/"}},
+        {"name": "fetch", "args": {"url": "https://www.anthropic.com/research"}}
+      ]},
+      "metadata": {"what_it_tests": "Một fetch cho mỗi URL, không bỏ sót phần thứ hai."}
+    },
+    {
+      "id": "G04_top_social_limit",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm 8 bài đăng top về AI agents trên mạng xã hội.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "social_search", "args": {"query": "AI agents", "search_type": "Top", "limit": 8}}]},
+      "metadata": {"what_it_tests": "Phân biệt topic search với timeline và giữ Top + limit."}
+    },
+    {
+      "id": "G05_capability_no_tool",
+      "phase": "B",
+      "suite": "group",
+      "query": "Liệt kê ngắn gọn các loại nghiên cứu bạn hỗ trợ.",
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"what_it_tests": "Câu hỏi năng lực phải trả lời trực tiếp, không dùng send hay search."}
+    },
+    {
+      "id": "GM01_account_correction",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Lấy 9 tweet của Sam Altman"},
+        {"role": "user", "content": "Đổi sang Andrej Karpathy"},
+        {"role": "user", "content": "Và chỉ lấy 4 bài mới nhất"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "timeline", "args": {"screenname": "karpathy", "limit": 4}}]},
+      "metadata": {"what_it_tests": "Hai correction độc lập: account và limit cuối cùng thắng."}
+    },
+    {
+      "id": "GM02_url_carryover",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Mình muốn đọc một bài"},
+        {"role": "user", "content": "Link là https://openai.com/research/"},
+        {"role": "user", "content": "Tóm tắt đúng link vừa gửi, không tìm web"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "fetch", "args": {"url": "https://openai.com/research/"}}]},
+      "metadata": {"what_it_tests": "Carry URL qua lượt và không đổi sang lookup."}
+    },
+    {
+      "id": "GM03_send_without_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Soạn nội dung: Bản tin AI hôm nay"},
+        {"role": "assistant", "content": "Đã soạn nội dung nháp."},
+        {"role": "user", "content": "Đăng nó lên Telegram đi"}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"what_it_tests": "Mệnh lệnh đăng chưa phải xác nhận exact-content; cần yes/no trước write."}
+    },
+    {
+      "id": "GM04_switch_and_keep_day",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm tweet về robotics"},
+        {"role": "user", "content": "Không, chuyển sang tin web về robotics hôm nay"},
+        {"role": "user", "content": "Giữ đúng chủ đề và mốc hôm nay"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "robotics", "topic": "news", "timeframe": "day"}}]},
+      "metadata": {"what_it_tests": "Switch social sang web và carry subject/timeframe."}
+    },
+    {
+      "id": "GM05_cancel_research_no_tool",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm tin AI hôm nay"},
+        {"role": "user", "content": "Khoan, hủy yêu cầu tìm kiếm đó"},
+        {"role": "user", "content": "Chỉ nói bạn đã hiểu, đừng gọi tool"}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"what_it_tests": "Latest turn hủy tác vụ: không thực thi tool từ lượt cũ."}
+    }
+  ]
 }
